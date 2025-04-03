@@ -3,7 +3,6 @@
 //use case of copy constructor : identical movies but different languages
 //
 //Ticket Reservation System for Cinema
-#include <chrono>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -16,7 +15,7 @@ static int id2 = 0;
 //-------------CLASSES------------------------------------
 class Movie {
 
-protected:
+private:
     std::string title;
     int year_of_release;
     int duration; //in minutes ,i have to change
@@ -61,7 +60,9 @@ public:
 Movie::Movie(const std::string& title, int year, int duration, int rating)
         : title(title), year_of_release(year), duration(duration), rating(rating) {}
 
-Movie::Movie() : title("Unknown"), year_of_release(0), duration(0), rating(0) {}
+Movie::Movie() : title("Unknown"), year_of_release(0), duration(0), rating(0) {
+    std::cout<<"default constructor called:)"<<std::endl;
+}
 
 Movie::Movie(std::string title, int year) : title(title), year_of_release(year), duration(0), rating(0) {
     std::cout <<"Overloaded constructor called :)"<< std::endl;
@@ -88,6 +89,7 @@ std::ostream& operator<<(std::ostream& os, const Movie& movie) {
     os << "Duration: " << movie.duration << " minutes" <<std::endl;
     os << "Rating: " << movie.rating << "/10" << std::endl;
     os << "writing operator friend fnct called :)" << std::endl;
+    return os;
 
 }
 
@@ -101,6 +103,7 @@ std::istream& operator>>(std::istream& is, Movie &movie) {
     std::cout<<"Enter rating: ";
     is >> movie.rating;
     std::cout<< "reading operator friend fnct called:)" <<std::endl;
+    return is;
 }
 
 Movie Movie::operator+(const Movie& movie) const {
@@ -113,8 +116,8 @@ Movie Movie::operator+(const Movie& movie) const {
 }
 
 Movie::~Movie() {
-    std::cout<<"Destructor called :)"<<std::endl;
-    std::cout<<"For the movie: "<<title<<std::endl;
+    // std::cout<<"Destructor called :)"<<std::endl;
+    // std::cout<<"For the movie: "<<title<<std::endl;
 }
 
 //another overloaded operator built as a non-member function
@@ -252,6 +255,41 @@ public:
 };
 
 //---------UI functions-------------------------------------
+void case7(){
+    std::cout << "Constructors and operators for the class \"Movie\":\n\n";
+    std::cout <<"Firstly i will use the default constructor,\nand after every modification i will print the object\n"<< std::endl;
+    Movie film;
+    std :: cout<< film<<std::endl;
+
+    std::cout << "Now I will use the overload constructor:" << std::endl;
+    Movie film2("Titanic", 1997);
+    std :: cout<< film2<<std::endl;
+
+    std::cout<<"Now i will use the copy constructor:\n";
+    Movie film3(film2);
+    std :: cout<< film3<<std::endl;
+
+    std::cout<<"Now i will use the copy operator:\n";
+    film2 = film;
+    std::cout <<film2<<std::endl;
+
+    std::cout<<"Now i will use the movie operator\n";
+    std::cin >> film3;
+    std::cout<<film3<<std::endl;
+
+    std::cout<<"Now i will use the '+' operator:\n";
+    std::cout << film3+film2<<std::endl;
+
+    std::cout<<"Now i will use the '==' operator:\n";
+    if (film3 != film) {
+        std::cout<<"Test passed\n\n";
+    }
+    std::cout<<"So all the requirements in the task have been met!\n\n";
+
+}
+
+
+
 
 void displayMenu() {
     std::cout << "TICKET RESERVATION SYSTEM FOR CINEMA" << std::endl;
@@ -262,7 +300,8 @@ void displayMenu() {
     std::cout << "4. Reserve a seat" <<std::endl;
     std::cout << "5. Assign a seat automatically\n   we will provide best possible seats ;)" <<std::endl;
     std::cout << "6. Cancel a reservation"<<std::endl;
-    std::cout << "7. Exit" <<std::endl;
+    std::cout << "7. Work with constructors and operators\n   ()" <<std::endl;
+    std::cout << "8. Exit" <<std::endl;
 }
 
 void mainLoop() {
@@ -297,12 +336,10 @@ void mainLoop() {
 
                 break;
             case 7:
-                std::cout << "";
-
+                case7();
                 break;
             default:
-                std::cout << "";
-
+                std::cout << "Invalid option! Plese select a valid one!\n"<<std::endl;
                 break;
         }
 
@@ -315,21 +352,37 @@ void mainLoop() {
 //------------------------MAIN--------------------------------
 
 int main() {
-
     ///-----------------------initializing movies----------------------------
-    Movie amovie("Oppenheimer", 2023, 3, 8.3);
-    Movie bmovie("Interstellar", 2014, 2, 8.7);
-    Movie cmovie("Batman", 2022, 3, 7.8);
-
+    // Movie movie0("Oppenheimer", 2023, 181, 8.3);
+    // Movie movie1("Interstellar", 2014, 179, 8.7);
+    // Movie movie2("Batman", 2022, 176, 7.8);
+    // Movie movie3();
+    // Movie movie4();
+    // Movie movie5();
+    // Movie movie6();
+    // Movie movie7();
+    // Movie movie8();
+    // Movie movie9();
+    // Movie movie10();
+    // Movie movie11();
+    // Movie movie12();
+    // Movie movie13();
+    // Movie movie14();
+    // Movie movie15();
+    // Movie movie16();
+    // Movie movie17();
+    // Movie movie18();
+    // Movie movie19();
+    // Movie movi20();
     // amovie.showMovieInfo();
     // bmovie.showMovieInfo();
     // cmovie.showMovieInfo();
 
 
     ///-------------------------initializing movie dates-------------------------
-    MovieDate amovieDate("Oppenheimer", 2023, 3, 8.3, 25,12, 4, 2025, 18, 30);
-    MovieDate bmovieDate("Interstellar", 2014, 2, 8.7, 30,15, 5, 2025, 20, 00);
-    MovieDate cmovieDate("Batman", 2022, 3, 7.8, 20,20, 6, 2025, 22, 15);
+    MovieDate amovieDate("Oppenheimer", 2023, 181, 8.3, 25,12, 4, 2025, 18, 30);
+    MovieDate bmovieDate("Interstellar", 2014, 179, 8.7, 30,15, 5, 2025, 20, 00);
+    MovieDate cmovieDate("Batman", 2022, 176, 7.8, 20,20, 6, 2025, 22, 15);
 
     // amovieDate.showMovieDate();
     // bmovieDate.showMovieDate();
@@ -340,15 +393,6 @@ int main() {
     Room broom(15,15);
     Room croom(12,14);
 
-    aroom.showRoomInfo();
-    aroom.showBoard();
-    aroom.modifyBoard(3,4);
-    aroom.modifyBoard(3,4);
-    aroom.modifyBoard(19,35);
-    aroom.showRoomInfo();
-    aroom.showBoard();
-    // broom.showRoomInfo();
-    // croom.showRoomInfo();
 
     return 0;
 }
