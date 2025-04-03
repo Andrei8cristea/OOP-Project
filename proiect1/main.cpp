@@ -1,4 +1,9 @@
+//TO DO:
+//
+//use case of copy constructor : identical movies but different languages
+//
 //Ticket Reservation System for Cinema
+#include <chrono>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -18,14 +23,111 @@ protected:
     float rating;
 
 public:
-    //constructor de initializare
+    //initializer constructor
     Movie(const std::string& title, int year, int duration, int rating);
+
+    //default constructor
+    Movie();
+
+    //overloaded constructor
+    Movie(std::string title, int year);
+
+    //copy constructor
+    Movie(const Movie& movie);
+
+    //operator= for copy
+    Movie& operator=(const Movie& movie);
+
+    //operator>> for output (friend fnct)
+    friend std::ostream& operator<<(std::ostream& os, const Movie& movie);
+
+    //operator<< for input (friend fnct)
+    friend std::istream& operator>>(std::istream& is, Movie& movie);
+
+    //another overloaded operator as a member function(method)
+        //concatenates the titles of two movies to and makes the average rating
+    Movie operator+(const Movie& movie) const;
+
+    //destructor
+    ~Movie();
     void showMovieInfo() const;
+
+    //getter for the title
+    std::string getTitle() const;
+
 
 };
 
 Movie::Movie(const std::string& title, int year, int duration, int rating)
         : title(title), year_of_release(year), duration(duration), rating(rating) {}
+
+Movie::Movie() : title("Unknown"), year_of_release(0), duration(0), rating(0) {}
+
+Movie::Movie(std::string title, int year) : title(title), year_of_release(year), duration(0), rating(0) {
+    std::cout <<"Overloaded constructor called :)"<< std::endl;
+}
+
+Movie::Movie(const Movie &another): title(another.title), year_of_release(another.year_of_release),duration(another.duration),rating(another.rating){
+    std::cout<<"Copy constructor called :)"<<std::endl;
+}
+
+Movie& Movie::operator=(const Movie &another) {
+    if (this != &another) { //for not making useless assignments
+        title = another.title;
+        year_of_release = another.year_of_release;
+        duration = another.duration;
+        rating = another.rating;
+        std::cout<<"Assign copy constructor called :)"<<std::endl;
+        return *this;
+    }
+}
+
+std::ostream& operator<<(std::ostream& os, const Movie& movie) {
+    os << "Title: " << movie.title << std::endl;
+    os << "Year Of Release: " << movie.year_of_release << std::endl;
+    os << "Duration: " << movie.duration << " minutes" <<std::endl;
+    os << "Rating: " << movie.rating << "/10" << std::endl;
+    os << "writing operator friend fnct called :)" << std::endl;
+
+}
+
+std::istream& operator>>(std::istream& is, Movie &movie) {
+    std::cout<<"Enter title: ";
+    is >>  movie.title;
+    std::cout<<"Enter year of release: ";
+    is >> movie.year_of_release;
+    std::cout<<"Enter duration: ";
+    is >> movie.duration;
+    std::cout<<"Enter rating: ";
+    is >> movie.rating;
+    std::cout<< "reading operator friend fnct called:)" <<std::endl;
+}
+
+Movie Movie::operator+(const Movie& movie) const {
+    std::string newTitle = "The Series: " + title + " & " + movie.title;
+    int newYearOfRelease = (year_of_release > movie.year_of_release ? year_of_release : movie.year_of_release);
+    int newDuration = duration + movie.duration;
+    float newRating = (rating + movie.rating) / 2.0f;
+    std::cout<< "+operator overloaded used :)"<<std::endl;
+    return Movie(newTitle, newYearOfRelease, newDuration, newRating);
+}
+
+Movie::~Movie() {
+    std::cout<<"Destructor called :)"<<std::endl;
+    std::cout<<"For the movie: "<<title<<std::endl;
+}
+
+//another overloaded operator built as a non-member function
+//first i need a getter for the title date which is private
+std::string Movie::getTitle() const {
+    return title;
+}
+
+bool operator==(const Movie &movie1, const Movie &movie2) {
+    std::cout << "friend overloaded operator used :)" << std::endl;
+    return movie1.getTitle() == movie2.getTitle();
+}
+
 
 void Movie::showMovieInfo() const {
     std::cout << title << std::endl << year_of_release <<std::endl << duration <<std::endl<< rating<<std::endl<<std::endl;
