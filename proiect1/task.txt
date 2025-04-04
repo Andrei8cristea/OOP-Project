@@ -1,31 +1,19 @@
 Sistem de Rezervare a Biletelor la Cinema Descriere: O aplicație care permite utilizatorilor să rezerve bilete pentru filme, gestionând programul sălilor, selecția locurilor și confirmarea rezervărilor. Ierarhii de Clase:
-
 Clasa de bază Film → titlu, durata, rating
-
 Clasa Sala → dispunerea locurilor, tipul sălii
-
 Clasa Rezervare → film asociat, sală și locurile selectate
-
 Principii OOP:
-
 Implementarea constructorilor (inițializare, copiere, suprascriere)
-
 Operatorii de citire/afișare pentru filme și rezervări
-
 Destructor virtual și gestionarea excepțiilor (exemplu: loc deja rezervat)
-
 Utilizarea STL și Lambda:
-
 std::list pentru programul sălilor
-
 std::vector pentru locurile disponibile
-
 Funcții lambda pentru verificarea rapidă a locurilor
-
 Design Patterns:
-
 Observer pentru notificarea utilizatorilor când un film este adăugat sau când locurile devin disponibile
-
 Command pentru gestionarea rezervărilor, modificărilor și anulărilor
-
 Interfață Grafică: Meniu text-based interactiv care permite navigarea printre filme, vizualizarea sălilor și rezervarea biletelor.
+
+
+
