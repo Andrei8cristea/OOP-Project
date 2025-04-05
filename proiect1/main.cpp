@@ -17,11 +17,14 @@
 #include <exception>
 #include <list>
 #include <algorithm>
+#include "Movie.h"
+#include "MovieDate.h"
+#include "Room.h"
 
 //-------------GLOBAL VARIABLES---------------------------
 
-static int id = 0;
-static int id2 = 0;
+
+
 
 //-------------CLASSES------------------------------------
 class Exceptions : public std::exception {
@@ -82,363 +85,29 @@ class Reservations {
     }
 };
 
-
-class Movie {
-
+template <typename U>
+class RepositoryDates {
 private:
-    std::string title;
-    int year_of_release;
-    int duration; //in minutes ,I have to change
-    float rating;
-    static int movieCount;
-
+    std::list<U> repository_dates;
 public:
-    //initializer constructor
-    Movie(const std::string& title, int year, int duration, int rating);
+    void addRepositoryDate(const U& dates) {
+        repository_dates.push_back(dates);
+    }
+    void deleteRepositoryDate(const U& dates) {
+        repository_dates.remove(dates);
+    }
 
-    //default constructor
-    Movie();
+    //getter for the repository dates
+    const std::list<U>& getRepositoryDates() const {
+        return repository_dates;
+    }
 
-    //overloaded constructor
-    Movie(std::string title, int year);
-
-    //copy constructor
-    Movie(const Movie& movie);
-
-    //operator= for copy
-    Movie& operator=(const Movie& movie);
-
-    //operator>> for output (friend fnct)
-    friend std::ostream& operator<<(std::ostream& os, const Movie& movie);
-
-    //operator<< for input (friend fnct)
-    friend std::istream& operator>>(std::istream& is, Movie& movie);
-
-    //another overloaded operator as a member function(method)
-        //concatenates the titles of two movies to and makes the average rating
-    Movie operator+(const Movie& movie) const;
-
-    //destructor virtual (because this class is a superclass)
-    virtual ~Movie();
-
-    void showMovieInfo() const;
-
-    //getter for the title
-    std::string getTitle() const;
-
-    //getter for the movieCount
-    static int getMovieCount(){return movieCount;}
+    void displayRepositoryDates() const {
+        std::cout << "The list with all the repository dates is the following:" << std::endl;
+    }
 
 
 };
-
-int Movie::movieCount = 0; // static init
-
-Movie::Movie(const std::string& title, int year, int duration, int rating)
-        : title(title), year_of_release(year), duration(duration), rating(rating) {++movieCount;}
-
-Movie::Movie() : title("Unknown"), year_of_release(0), duration(0), rating(0) {
-   // std::cout<<"default constructor called:)"<<std::endl;
-    ++movieCount;
-}
-
-Movie::Movie(std::string title, int year) : title(title), year_of_release(year), duration(0), rating(0) {
-    //std::cout <<"Overloaded constructor called :)"<< std::endl;
-    ++movieCount;
-}
-
-Movie::Movie(const Movie &another): title(another.title), year_of_release(another.year_of_release),duration(another.duration),rating(another.rating){
-    //std::cout<<"Copy constructor called :)"<<std::endl;
-    ++movieCount;
-}
-
-Movie& Movie::operator=(const Movie &another) {
-    if (this != &another) { //for not making useless assignments
-        title = another.title;
-        year_of_release = another.year_of_release;
-        duration = another.duration;
-        rating = another.rating;
-        //std::cout<<"Assign copy constructor called :)"<<std::endl;
-        return *this;
-    }
-}
-
-std::ostream& operator<<(std::ostream& os, const Movie& movie) {
-    std::cout << "+----------------------------------------+\n";
-    std::cout << "|             MOVIE DETAILS              |\n";
-    std::cout << "+----------------------------------------+\n";
-
-    std::cout << " 🎬 MOVIE TITLE : " << movie.title << "\n";
-    std::cout << " 📅 RELEASE YEAR: " << movie.year_of_release << "\n";
-    std::cout << " ⏳ DURATION    : " << movie.duration << " min\n";
-    std::cout << " ⭐ RATING      : " << movie.rating << "/10\n";
-    return os;
-
-}
-
-std::istream& operator>>(std::istream& is, Movie &movie) {
-    std::cout<<"Enter title: ";
-    is >>  movie.title;
-    std::cout<<"Enter year of release: ";
-    is >> movie.year_of_release;
-    std::cout<<"Enter duration: ";
-    is >> movie.duration;
-    std::cout<<"Enter rating: ";
-    is >> movie.rating;
-
-
-    //checking and throwing exceptions
-    if(movie.year_of_release < 1800 || movie.year_of_release > 2030) {
-        throw Exceptions("Year of release is out of range!");
-    }
-    if (movie.duration < 1 || movie.duration > 10000) {
-        throw Exceptions("Duration is out of range!");
-    }
-    if (movie.rating < 0 || movie.rating > 10) {
-        throw Exceptions("Rating is out of range!");
-    }
-
-    std::cout<< "reading operator friend fnct called:)" <<std::endl;
-    return is;
-}
-
-Movie Movie::operator+(const Movie& movie) const {
-    std::string newTitle = "The Series: " + title + " & " + movie.title;
-    int newYearOfRelease = (year_of_release > movie.year_of_release ? year_of_release : movie.year_of_release);
-    int newDuration = duration + movie.duration;
-    float newRating = (rating + movie.rating) / 2.0f;
-    //std::cout<< "+operator overloaded used :)"<<std::endl;
-    return Movie(newTitle, newYearOfRelease, newDuration, newRating);
-}
-
-Movie::~Movie() {
-    // std::cout<<"Destructor called :)"<<std::endl;
-    // std::cout<<"For the movie: "<<title<<std::endl;
-}
-
-//another overloaded operator built as a non-member function
-//first I need a getter for the title date which is private
-std::string Movie::getTitle() const {
-    return title;
-}
-
-bool operator==(const Movie &movie1, const Movie &movie2) {
-    std::cout << "friend overloaded operator used :)" << std::endl;
-    return movie1.getTitle() == movie2.getTitle();
-}
-
-
-void Movie::showMovieInfo() const {
-    std::cout << "+----------------------------------------+\n";
-    std::cout << "|             MOVIE DETAILS              |\n";
-    std::cout << "+----------------------------------------+\n";
-
-    std::cout << " 🎬 MOVIE TITLE : " << title << "\n";
-    std::cout << " 📅 RELEASE YEAR: " << year_of_release << "\n";
-    std::cout << " ⏳ DURATION    : " << duration << " min\n";
-    std::cout << " ⭐ RATING      : " << rating << "/10\n";}
-
-
-class MovieDate :public  Movie {
-
-private:
-    int movie_id;
-    int room_id;
-    float price;
-    int date;
-    int month;
-    int year;
-    int hour;
-    int minute;
-
-public:
-
-    //default constructor
-    MovieDate() = default;
-
-    //initialization constructor from 0
-    MovieDate(const std::string& title, int year_of_release, int duration, int rating,
-              float price, int date, int month, int year, int hour, int minute);
-
-    //initialization constructor from basemovie
-    MovieDate(const Movie* baseMovie,int room_id, float price, int date, int month, int year, int hour, int minute)
-    :Movie(*baseMovie),
-    movie_id(id++),room_id(room_id), price(price),date(date),month(month),
-    year(year), hour(hour), minute(minute){};
-
-    //overridden copy constructor
-    MovieDate(const MovieDate& another);
-
-    //overridden operator=
-    MovieDate& operator=(const MovieDate& movie);
-
-    //upcast
-    void showMovieDate() const;
-
-    //static_cast
-    void adjustPrice(float discount);
-
-    //destructor (non-virtual because this class doesn't have any subclasses)
-    ~MovieDate();
-
-};
-
-MovieDate::MovieDate(const std::string &title, int year_of_release, int duration, int rating, float price,int date, int month, int year, int hour, int minute)
-    :Movie(title, year_of_release, duration, rating),movie_id(id++),price(price),date(date), month(month), year(year), hour(hour), minute(minute) {}
-
-MovieDate::MovieDate(const MovieDate &another)
-    :Movie(another), //call for copy constructor from Movie class
-    movie_id (another.movie_id),
-    room_id(another.room_id),
-    price (another.price),
-    date (another.date),
-    month (another.month),
-    year (another.year),
-    hour (another.hour),
-    minute (another.minute) {
-    //std::cout << "Copy constructor for MovieDate called :)" << std::endl;
-
-}
-
-MovieDate& MovieDate::operator=(const MovieDate &movie)  {
-    if (this != &movie) {
-        Movie::operator=(movie); //assigning the superclass part
-        room_id = movie.room_id;
-        movie_id = movie.movie_id;
-        price = movie.price;
-        date = movie.date;
-        month = movie.month;
-        year = movie.year;
-        hour = movie.hour;
-        minute = movie.minute;
-    }
-    return *this;
-}
-
-void MovieDate::showMovieDate() const {
-    std::cout <<*this; //I am using the <<(overridden) operator from the superclass
-
-    std::cout << "+----------------------------------------+\n";
-    std::cout << "|             SHOWTIME INFO              |\n";
-    std::cout << "+----------------------------------------+\n";
-    std::cout << " 💰 PRICE      : $" << price << "\n";
-    std::cout << " 🏠ROOM NUMBER : " << room_id << "\n";
-    std::cout << " 📅 DATE       : " << (date < 10 ? "0" : "") << date << "/"
-             << (month < 10 ? "0" : "") << month << "/" << year << "\n";
-    std::cout << " ⏰ TIME       : " << (hour < 10 ? "0" : "") << hour << ":"
-              << (minute < 10 ? "0" : "") << minute << "\n";
-
-    std::cout << "+----------------------------------------+\n";
-    std::cout << "|           ENJOY YOUR MOVIE!            |\n";
-    std::cout << "+----------------------------------------+\n";
-}
-
-void MovieDate::adjustPrice(float discount) {
-
-    price = static_cast<int>(price * discount);
-}
-
-MovieDate::~MovieDate() {
-    //std::cout<<"MovieDate destructor called :)"<<std::endl;
-}
-
-void displayMovieFullInfo(Movie* moviePtr) {
-    std::cout<<"Basic Movie Info:"<<std::endl<<*moviePtr<<std::endl;
-    //here I try the downcasting
-    MovieDate* movieDatePtr = dynamic_cast<MovieDate*>(moviePtr);
-    //if moviePtr is  MovieDate I will output the essential info
-    //else if it was just a Movie -> unlucky
-    if (movieDatePtr != nullptr) {
-        std::cout<<"Downcast succeeded"<<std::endl;
-        movieDatePtr->showMovieDate();
-    }
-    else {
-        std::cout<<"Not a MovieDate object :("<<std::endl;
-    }
-}
-
-
-
-
-
-class Room {
-
-    int room_id;
-    int rows_number;
-    int columns_number;
-    std::vector<std::vector<char>> board;
-
-public:
-    Room(int rows_number, int colums_number);
-    void showRoomInfo() const;
-    void showBoard() const;
-    void modifyBoard(int row_nr, int col_nr);
-};
-
-Room::Room(int rows, int columns)
-:room_id(id2++),rows_number(rows),columns_number(columns),board(rows, std::vector<char>(columns, '_')){}
-
-void Room::showRoomInfo() const {
-
-    int cnt = 0;
-    for (auto&row : board) {
-        for (auto&col : row) {
-            if (col == '_') {
-                cnt++;
-            }
-        }
-    }
-    std::cout <<"Room ID: "<< room_id << std::endl;
-    std::cout <<"Available seats: "<<cnt << std::endl;
-    std::cout <<"Rows: "<< rows_number << std::endl;
-    std::cout <<"Columns: "<< columns_number << std::endl;
-    std::cout << std::endl;
-
-    }
-
-void Room::showBoard() const {
-    int i, j;
-    std::cout <<"-----SCREEN-----SCREEN-----SCREEN-----SCREEN-----SCREEN-----"<<"\t"<< std::endl;
-    std::cout << "    ";
-    for (j = 0; j < columns_number; j++) {
-        std::cout << j+1 << "\t";
-    }
-    std::cout << std::endl;
-    for (i = 0; i < rows_number; i++) {
-        std::cout << i+1 << "\t";
-        for (j = 0; j < columns_number; j++) {
-            std::cout << board[i][j]<< "\t";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-
-    // for (auto&row : board) {
-    //     std::cout << i;
-    //     i++;
-    //     for (auto&col : row) {
-    //         std::cout << col<<"\t";
-    //     }
-    //     std::cout << std::endl;
-
-}
-
-void Room::modifyBoard(int row_nr, int col_nr) {
-    if (row_nr >= 1 && row_nr <= rows_number && col_nr >= 1 && col_nr <= columns_number) {
-        if (board[row_nr-1][col_nr-1] == '#') {
-           //std::cout << "We're sorry, this seat is already booked..." << "\n";
-            throw Exceptions("We're sorry, this seat is already booked...");
-        }
-        else{
-            board[row_nr-1][col_nr-1] = '#';
-        }
-    }
-
-    else {
-        std::cout << "Invalid seat position!"<<"\n";
-    }
-}
-
 
 class Ticket {
 private:
@@ -457,6 +126,33 @@ public:
 
 //---------UI functions-------------------------------------
 
+void showMovieDatesForMovieTitle(const RepositoryDates<MovieDate> & repo, const std::string& movieTitle) {
+    std::cout << "Please enter the movie you want to watch: ";
+    bool found = false;
+    for (const auto& md : repo.getRepositoryDates()) {
+        if (md.getTitle() == movieTitle) {
+            md.showMovieDate();
+            found = true;
+        }
+    }
+    if (!found) {
+        std::cout<<"We're sorry! No showtime found for the movie: "<<movieTitle<<std::endl;
+    }
+}
+
+void showMovieDatesForMovieID(const RepositoryDates<MovieDate> & repo,  int movieid) {
+
+    bool found = false;
+    for (const auto& md : repo.getRepositoryDates()) {
+        if (md.getmovieID() == movieid) {
+            md.showMovieDate();
+            found = true;
+        }
+    }
+    if (!found) {
+        std::cout<<"We're sorry! No showtime found for the movie: "<<movieid<<std::endl;
+    }
+}
 
 
 void case8(){
@@ -485,7 +181,7 @@ void case8(){
     std::cout << film3+film2<<std::endl;
 
     std::cout<<"Now i will use the '==' operator:\n";
-    if (film3 != film) {
+    if (&film2 == &film) {
         std::cout<<"Test passed\n\n";
     }
     std::cout<<"So all the requirements in the task have been met!\n\n";
@@ -497,7 +193,6 @@ void displayMenu() {
     std::cout << "Please select one of the following options:" <<std::endl;
     std::cout << "1. Show available movies" <<std::endl;
     std::cout << "2. Show available runtimes for a movie" <<std::endl;
-    std::cout << "3. Show movie details" <<std::endl;
     std::cout << "4. Reserve a seat" <<std::endl;
     std::cout << "5. Assign a seat automatically\n   we will provide best possible seats ;)" <<std::endl;
     std::cout << "6. Cancel a reservation"<<std::endl;
@@ -515,7 +210,9 @@ void displayMenu() {
 int main() {
     ///-----------------------initializing repo------------------------------
     Repository<Movie> movies_list;
+    RepositoryDates<MovieDate> movies_dates;
     Reservations<Ticket> tickets_list;
+
 
 
 
@@ -578,6 +275,31 @@ int main() {
     MovieDate* moviedate24 = new MovieDate(movie4, 4, 26.00, 7, 7, 2025, 17, 55);
     MovieDate* moviedate25 = new MovieDate(movie5, 1, 22.75, 11, 7, 2025, 19, 20);
 
+    movies_dates.addRepositoryDate(*moviedate1);
+    movies_dates.addRepositoryDate(*moviedate2);
+    movies_dates.addRepositoryDate(*moviedate3);
+    movies_dates.addRepositoryDate(*moviedate4);
+    movies_dates.addRepositoryDate(*moviedate5);
+    movies_dates.addRepositoryDate(*moviedate6);
+    movies_dates.addRepositoryDate(*moviedate7);
+    movies_dates.addRepositoryDate(*moviedate8);
+    movies_dates.addRepositoryDate(*moviedate9);
+    movies_dates.addRepositoryDate(*moviedate10);
+    movies_dates.addRepositoryDate(*moviedate11);
+    movies_dates.addRepositoryDate(*moviedate12);
+    movies_dates.addRepositoryDate(*moviedate13);
+    movies_dates.addRepositoryDate(*moviedate14);
+    movies_dates.addRepositoryDate(*moviedate15);
+    movies_dates.addRepositoryDate(*moviedate16);
+    movies_dates.addRepositoryDate(*moviedate17);
+    movies_dates.addRepositoryDate(*moviedate18);
+    movies_dates.addRepositoryDate(*moviedate19);
+    movies_dates.addRepositoryDate(*moviedate20);
+    movies_dates.addRepositoryDate(*moviedate21);
+    movies_dates.addRepositoryDate(*moviedate22);
+    movies_dates.addRepositoryDate(*moviedate23);
+    movies_dates.addRepositoryDate(*moviedate24);
+    movies_dates.addRepositoryDate(*moviedate25);
 
 
     // MovieDate amovieDate("Oppenheimer", 2023, 181, 8.3, 25,12, 4, 2025, 18, 30);
@@ -604,24 +326,36 @@ int main() {
         int option;
         do {
             displayMenu();
+            std::cout << "Your option: ";
             std::cin >> option;
 
             switch (option) {
-                case 1:
-                    std::cout << "Showing available movies..." <<std::endl;
-                    movies_list.displayMovies();
+                case 1:{
+                std::cout << "Showing available movies..." <<std::endl;
+                movies_list.displayMovies();
                 break;
-                case 2:
-                    std::cout << "";
+                }
+                case 2:{
+                std::cout << "Please enter the ID of the movie you want to watch: ";
+                //std::string input;
+                int input;
+                std::cin.ignore();
+                //std::getline(std::cin, input);
+
+                std::cin >> input;
+
+
+                std::cout <<"Searching for the movie "<<input<<" ..."<< std::endl;
+                showMovieDatesForMovieID(movies_dates, input);
 
                 break;
+                }
                 case 3:
                     std::cout << "";
 
                 break;
                 case 4:
                     std::cout << "";
-
                 break;
                 case 5:
                     std::cout << "";
@@ -638,7 +372,7 @@ int main() {
                     case8();
                 break;
                 case 9:
-                    std::cout << "";
+                    std::cout << "Exiting..." <<std::endl;
                 break;
                 default:
                     std::cout << "Invalid option! Please select a valid one!\n"<<std::endl;
@@ -648,6 +382,44 @@ int main() {
         }while (option != 9);
 
 
+
+
+    delete movie1;
+    delete movie2;
+    delete movie3;
+    delete movie4;
+    delete movie5;
+    delete movie6;
+    delete movie7;
+    delete movie8;
+    delete movie9;
+    delete movie10;
+
+    delete moviedate1;
+    delete moviedate2;
+    delete moviedate3;
+    delete moviedate4;
+    delete moviedate5;
+    delete moviedate6;
+    delete moviedate7;
+    delete moviedate8;
+    delete moviedate9;
+    delete moviedate10;
+    delete moviedate11;
+    delete moviedate12;
+    delete moviedate13;
+    delete moviedate14;
+    delete moviedate15;
+    delete moviedate16;
+    delete moviedate17;
+    delete moviedate18;
+    delete moviedate19;
+    delete moviedate20;
+    delete moviedate21;
+    delete moviedate22;
+    delete moviedate23;
+    delete moviedate24;
+    delete moviedate25;
 
 
     return 0;
