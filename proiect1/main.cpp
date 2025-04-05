@@ -6,6 +6,7 @@
 /*
  * apply discounts
  * add movies
+ * asssign automatically a seat
  */
 //adjust price
 
@@ -27,18 +28,7 @@
 
 
 //-------------CLASSES------------------------------------
-class Exceptions : public std::exception {
-private:
-    std::string message;
 
-public:
-    Exceptions(const std::string& msg) : message(msg) {}
-    //overriding what method from std::exception
-    const char* what() const noexcept override {
-        return message.c_str();
-    //c_str returns the string from the pointer message
-    }
-};
 
 template <typename T>
 class Repository {
@@ -52,6 +42,7 @@ public:
         movies.remove(movie);
     }
     void displayMovies() const{
+        std::cout << "Showing available movies..." <<std::endl;
         std::cout << "The list with all the movies is the following:\n" << std::endl;
         for (const T& movie : movies) {
             std::cout << movie << std::endl;
@@ -126,8 +117,13 @@ public:
 
 //---------UI functions-------------------------------------
 
-void showMovieDatesForMovieTitle(const RepositoryDates<MovieDate> & repo, const std::string& movieTitle) {
+void showMovieDatesForMovieTitle(const RepositoryDates<MovieDate> & repo)
+{
+    std::string movieTitle;
     std::cout << "Please enter the movie you want to watch: ";
+    std::cin.ignore();
+    std::getline(std::cin, movieTitle);
+    std::cout <<"Searching for the movie "<<movieTitle<<" ..."<< std::endl;
     bool found = false;
     for (const auto& md : repo.getRepositoryDates()) {
         if (md.getTitle() == movieTitle) {
@@ -140,8 +136,14 @@ void showMovieDatesForMovieTitle(const RepositoryDates<MovieDate> & repo, const 
     }
 }
 
-void showMovieDatesForMovieID(const RepositoryDates<MovieDate> & repo,  int movieid) {
+void showMovieDatesForMovieID(const RepositoryDates<MovieDate> & repo) {
+    std::cout << "Please enter the ID of the movie you want to watch: ";
 
+    int movieid;
+    std::cin.ignore();
+
+    std::cin >> movieid;
+    std::cout <<"Searching for the movie "<<movieid<<" ..."<< std::endl;
     bool found = false;
     for (const auto& md : repo.getRepositoryDates()) {
         if (md.getmovieID() == movieid) {
@@ -151,6 +153,99 @@ void showMovieDatesForMovieID(const RepositoryDates<MovieDate> & repo,  int movi
     }
     if (!found) {
         std::cout<<"We're sorry! No showtime found for the movie: "<<movieid<<std::endl;
+    }
+}
+
+void reserveSeat(const RepositoryDates<MovieDate> & repo, std::vector<Room>& rooms) {
+    std::string movieTitle;
+    std::cout << "Please enter the movie you want to watch: ";
+    std::cin.ignore();
+    std::getline(std::cin, movieTitle);
+
+    const MovieDate* selectedDate = nullptr;
+    for (const auto& md : repo.getRepositoryDates()) {
+        if (md.getTitle() == movieTitle) {
+            selectedDate = &md;
+            break;
+        }
+    }
+    if (!selectedDate) {
+        std::cout<<"No showtime for movie with the title: "<<movieTitle<<std::endl;
+        return;
+    }
+
+    std::cout << "\n Available showtimes for the movie: "<<movieTitle<<std::endl;
+    int index = 0;
+    std::vector<const MovieDate*> filteredDates;
+    for (const auto& md : repo.getRepositoryDates()) {
+        if (md.getTitle() == movieTitle) {
+            std::cout<<"["<<index<<"]"<<std::endl;
+            md.showMovieDate();
+            std::cout<<std::endl;
+            filteredDates.push_back(&md);
+            index++;
+        }
+    }
+    if (!filteredDates.size()) {
+        std::cout<<"No runtimes availavle for "<<movieTitle<<"."<<std::endl;
+        return;
+    }
+
+    int selectedIndex;
+    std::cout<<"Please enter the index of the showtime you want: ";
+    std::cin >> selectedIndex;
+    while (selectedIndex < 0 || selectedIndex >= static_cast<int>(filteredDates.size())) {
+        std::cout<<"Invalid showtime selection. Please enter a valid index: ";
+        std::cin >> selectedIndex;
+    }
+
+    const MovieDate* selectedDatePtr = filteredDates[selectedIndex];
+
+    int roomID= selectedDate->getRoomId();
+
+    Room* selectedRoom = nullptr;
+    for (auto& room : rooms) {
+        if (room.getRoomId()==roomID) {
+            selectedRoom = &room;
+            break;
+        }
+    }
+
+    if (!selectedRoom) {
+        std::cout<<"No room was found for the selected showtime."<<std::endl;
+    }
+
+    std::cout<<"Room info: \n"<<std::endl;
+    selectedRoom->showRoomInfo();
+    selectedRoom->showBoard();
+    std::cout<<std::endl;
+
+    //
+    //  int room_id = selectedDate->getRoomId();
+    // Room* selectedRoom = nullptr;
+    // for (auto&room : rooms) {
+    //     if (room.getRoomId() == room_id) {
+    //         selectedRoom = &room;
+    //         break;
+    //     }
+    // }
+    // if (!selectedRoom) {
+    //     std::cout<<"Room not found for the selected runtime!";
+    //     return;
+    // }
+
+    int row, column;
+    std::cout << "Enter the seat row number you want to reserve: ";
+    std::cin >> row;
+    std::cout << "Enter column number: ";
+    std::cin >> column;
+
+    try {
+        selectedRoom->modifyBoard(row, column);
+        std::cout<<"Seat reserved succesfully\n\n";
+    }
+    catch (const std::exception& e) {
+        std::cout<<"Error: "<<e.what();
     }
 }
 
@@ -193,12 +288,12 @@ void displayMenu() {
     std::cout << "Please select one of the following options:" <<std::endl;
     std::cout << "1. Show available movies" <<std::endl;
     std::cout << "2. Show available runtimes for a movie" <<std::endl;
-    std::cout << "4. Reserve a seat" <<std::endl;
-    std::cout << "5. Assign a seat automatically\n   we will provide best possible seats ;)" <<std::endl;
-    std::cout << "6. Cancel a reservation"<<std::endl;
-    std::cout << "7. Staff menu" <<std::endl;
-    std::cout << "8. Work with constructors and operators\n   ()" <<std::endl;
-    std::cout << "9. Exit" <<std::endl;
+    std::cout << "3. Reserve a seat" <<std::endl;
+    std::cout << "4. Assign a seat automatically\n   we will provide best possible seats ;)" <<std::endl;
+    std::cout << "5. Cancel a reservation"<<std::endl;
+    std::cout << "6. Staff menu" <<std::endl;
+    std::cout << "7. Work with constructors and operators\n   ()" <<std::endl;
+    std::cout << "8. Exit" <<std::endl;
 }
 
 
@@ -212,6 +307,7 @@ int main() {
     Repository<Movie> movies_list;
     RepositoryDates<MovieDate> movies_dates;
     Reservations<Ticket> tickets_list;
+    std::vector<Room> rooms;
 
 
 
@@ -316,11 +412,15 @@ int main() {
     // cmovieDate.showMovieDate();
 
     ///-------------------------initializing rooms ------------------------------
-    Room aroom(10,20);
-    Room broom(15,15);
-    Room croom(12,14);
-    aroom.modifyBoard(2,3);
-   // aroom.modifyBoard(2,3);
+    Room room1(10,20);
+    Room room2(15,15);
+    Room room3(12,14);
+    Room room4(20,20);
+    rooms.push_back(room1);
+    rooms.push_back(room2);
+    rooms.push_back(room3);
+    rooms.push_back(room4);
+
 
     //--------------------------Main Loop----------------------------------
         int option;
@@ -331,29 +431,17 @@ int main() {
 
             switch (option) {
                 case 1:{
-                std::cout << "Showing available movies..." <<std::endl;
-                movies_list.displayMovies();
-                break;
+                    movies_list.displayMovies();
+                    break;
                 }
                 case 2:{
-                std::cout << "Please enter the ID of the movie you want to watch: ";
-                //std::string input;
-                int input;
-                std::cin.ignore();
-                //std::getline(std::cin, input);
-
-                std::cin >> input;
-
-
-                std::cout <<"Searching for the movie "<<input<<" ..."<< std::endl;
-                showMovieDatesForMovieID(movies_dates, input);
-
-                break;
+                    //showMovieDatesForMovieID(movies_dates);
+                    showMovieDatesForMovieTitle(movies_dates);
+                    break;
                 }
-                case 3:
-                    std::cout << "";
-
-                break;
+                case 3: {
+                    reserveSeat(movies_dates, rooms);
+                }
                 case 4:
                     std::cout << "";
                 break;

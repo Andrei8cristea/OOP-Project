@@ -54,6 +54,7 @@ void MovieDate::showMovieDate() const {
              << (month < 10 ? "0" : "") << month << "/" << year << "\n";
     std::cout << " ⏰ TIME       : " << (hour < 10 ? "0" : "") << hour << ":"
               << (minute < 10 ? "0" : "") << minute << "\n";
+    std::cout << "🆔MOVIEDATE ID  :"<<moviedate_id<<std::endl;
 
     std::cout << "+----------------------------------------+\n";
     std::cout << "|           ENJOY YOUR MOVIE!            |\n";
@@ -83,3 +84,8 @@ void displayMovieFullInfo(Movie* moviePtr) {
         std::cout<<"Not a MovieDate object :("<<std::endl;
     }
 }
+
+int MovieDate::getRoomId() const {
+    return room_id;
+}
+

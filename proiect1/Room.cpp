@@ -3,9 +3,7 @@
 //
 
 #include "Room.h"
-
-#include <iosfwd>
-
+#include "Exceptions.h"
 #include <iostream>
 
 Room::Room(int rows, int columns)
@@ -60,7 +58,7 @@ void Room::modifyBoard(int row_nr, int col_nr) {
     if (row_nr >= 1 && row_nr <= rows_number && col_nr >= 1 && col_nr <= columns_number) {
         if (board[row_nr-1][col_nr-1] == '#') {
             //std::cout << "We're sorry, this seat is already booked..." << "\n";
-            //throw Exceptions("We're sorry, this seat is already booked...");
+            throw Exceptions("We're sorry, this seat is already booked...\n\n");
         }
         else{
             board[row_nr-1][col_nr-1] = '#';
@@ -70,4 +68,8 @@ void Room::modifyBoard(int row_nr, int col_nr) {
     else {
         std::cout << "Invalid seat position!"<<"\n";
     }
+}
+
+int Room::getRoomId() const {
+    return room_id;
 }

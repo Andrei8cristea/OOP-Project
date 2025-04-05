@@ -20,6 +20,9 @@ public:
     void showRoomInfo() const;
     void showBoard() const;
     void modifyBoard(int row_nr, int col_nr);
+
+    //getter for room_id
+    int getRoomId() const;
 };
 
 

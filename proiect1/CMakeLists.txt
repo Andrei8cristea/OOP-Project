@@ -9,4 +9,5 @@ add_executable(proiect1 main.cpp
         MovieDate.cpp
         MovieDate.h
         Room.cpp
-        Room.h)
+        Room.h
+        Exceptions.h)

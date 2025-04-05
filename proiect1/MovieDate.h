@@ -49,6 +49,9 @@ public:
     //destructor (non-virtual because this class doesn't have any subclasses)
     ~MovieDate();
 
+    //getter for room_id
+    int getRoomId() const;
+
 };
 
 
