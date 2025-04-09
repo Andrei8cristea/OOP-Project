@@ -7,7 +7,7 @@
 #include "MovieDate.h"
 #include <string>
 #include <iostream>
-
+#include <list>
 
 
 MovieDate::MovieDate(const std::string &title, int year_of_release, int duration, int rating, float price,int date, int month, int year, int hour, int minute)
@@ -65,6 +65,15 @@ void MovieDate::adjustPrice(float discount) {
 
     price = static_cast<int>(price * discount);
 }
+
+// void MovieDate::adjustGlobalPrice(std::list<MovieDate*>& movieDates, const std::string& movieTitle, float discountFactor) {
+//     for (auto mdPtr : movieDates) {
+//         if (mdPtr->getTitle() == movieTitle) {
+//             mdPtr->adjustPrice(discountFactor);
+//         }
+//     }
+//     std::cout << "Global price adjusted for movie: " << movieTitle << std::endl;
+// }
 
 MovieDate::~MovieDate() {
     //std::cout<<"MovieDate destructor called :)"<<std::endl;

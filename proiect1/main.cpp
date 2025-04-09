@@ -21,84 +21,16 @@
 #include "Movie.h"
 #include "MovieDate.h"
 #include "Room.h"
+#include "Exceptions.h"
+#include <termios.h>
+#include <unistd.h>
+#include <fstream>
+#include "StaffFunctions.h"
+#include "TemplateClasses.h"
 
 //-------------GLOBAL VARIABLES---------------------------
 
-
-
-
 //-------------CLASSES------------------------------------
-
-
-template <typename T>
-class Repository {
-private:
-    std::list<T> movies;
-public:
-    void addMovie(const T& movie) {
-        movies.push_back(movie);
-    }
-    void deleteMovie(const T& movie) {
-        movies.remove(movie);
-    }
-    void displayMovies() const{
-        std::cout << "Showing available movies..." <<std::endl;
-        std::cout << "The list with all the movies is the following:\n" << std::endl;
-        for (const T& movie : movies) {
-            std::cout << movie << std::endl;
-        }
-    }
-};
-
-template <typename S>
-class Reservations {
-    private:
-        std::list<S> reservations_list;
-    public:
-    void addResevation(const S& ticket) {
-        reservations_list.push_back(ticket);
-    }
-    void deleteResevation(const S& ticket) {
-        reservations_list.remove(ticket);
-    }
-    void displayResevations() const{
-        std::cout << "The list with all the reservations is the following:\n" << std::endl;
-
-        auto printReservations = [](const S& ticket) {
-            std::cout << ticket << std::endl;
-        };
-        std::for_each(reservations_list.begin(), reservations_list.end(), printReservations);
-
-
-        // for (const S& reservation : reservations_list) {
-        //     std::cout << reservation << std::endl;
-        // }
-    }
-};
-
-template <typename U>
-class RepositoryDates {
-private:
-    std::list<U> repository_dates;
-public:
-    void addRepositoryDate(const U& dates) {
-        repository_dates.push_back(dates);
-    }
-    void deleteRepositoryDate(const U& dates) {
-        repository_dates.remove(dates);
-    }
-
-    //getter for the repository dates
-    const std::list<U>& getRepositoryDates() const {
-        return repository_dates;
-    }
-
-    void displayRepositoryDates() const {
-        std::cout << "The list with all the repository dates is the following:" << std::endl;
-    }
-
-
-};
 
 class Ticket {
 private:
@@ -107,17 +39,12 @@ private:
     int rows_number;
     int columns_number;
 
-
-
 public:
-
 };
-
-
 
 //---------UI functions-------------------------------------
 
-void showMovieDatesForMovieTitle(const RepositoryDates<MovieDate> & repo)
+void showMovieDatesForMovieTitle(const Repository<MovieDate> & repo)
 {
     std::string movieTitle;
     std::cout << "Please enter the movie you want to watch: ";
@@ -136,7 +63,7 @@ void showMovieDatesForMovieTitle(const RepositoryDates<MovieDate> & repo)
     }
 }
 
-void showMovieDatesForMovieID(const RepositoryDates<MovieDate> & repo) {
+void showMovieDatesForMovieID(const Repository<MovieDate> & repo) {
     std::cout << "Please enter the ID of the movie you want to watch: ";
 
     int movieid;
@@ -156,7 +83,7 @@ void showMovieDatesForMovieID(const RepositoryDates<MovieDate> & repo) {
     }
 }
 
-void reserveSeat(const RepositoryDates<MovieDate> & repo, std::vector<Room>& rooms) {
+void reserveSeat(const Repository<MovieDate> & repo, std::vector<Room>& rooms) {
     std::string movieTitle;
     std::cout << "Please enter the movie you want to watch: ";
     std::cin.ignore();
@@ -187,7 +114,7 @@ void reserveSeat(const RepositoryDates<MovieDate> & repo, std::vector<Room>& roo
         }
     }
     if (!filteredDates.size()) {
-        std::cout<<"No runtimes availavle for "<<movieTitle<<"."<<std::endl;
+        std::cout<<"No runtimes available for "<<movieTitle<<"."<<std::endl;
         return;
     }
 
@@ -249,6 +176,117 @@ void reserveSeat(const RepositoryDates<MovieDate> & repo, std::vector<Room>& roo
     }
 }
 
+void disableEchoMode() {
+    termios t;//create a termios struct that holds terminal settings
+    tcgetattr(STDIN_FILENO, &t);//with this getter I put current terminal atributes in t
+    t.c_lflag &= ~ECHO;//I modify t so that will disable the echo flag
+    //bitwise not operation for echo because echo is a bit flag(and only one bit long)
+    tcsetattr(STDIN_FILENO, TCSANOW, &t);//apply changes that I have just made
+}
+
+void enableEchoMode() {
+    termios t;
+    tcgetattr(STDIN_FILENO, &t);
+    t.c_lflag |= ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &t);
+}
+
+bool verifyPassword(const std::string& staffName, const std::string& password) {
+    std::ifstream file("/home/andrei-cristea/Desktop/Facultate/Anul I/Semestrul 2/POO/proiect1/passwords.txt");
+    std::string line;
+
+    if (!file) {
+        throw Exceptions( "ERROR: File \"passwords.txt\" has not been found!");
+
+    }
+
+    while (std::getline(file,line)) {
+        if (line == (staffName + ":" + password)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+void staffMenu(Repository<Movie>& movies_list, Repository<MovieDate>& dates_list) {
+    std::string name;
+    std::string password;
+    int attempts = 3;
+
+    std::cout<<"Welcome to the staff menu."<<std::endl;
+    std::cin.ignore(10000, '\n');
+    //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    //here I empty the buffer because otherwise the input will be required
+    //before the needed output text
+
+    while (attempts>-0) {
+        std::cout<<"Please login below."<<std::endl<<"Please enter your name: ";
+        std::getline(std::cin, name);
+
+        std::cout<<"Please enter your password: ";
+        disableEchoMode();
+        std::getline(std::cin, password);
+        enableEchoMode();
+        std::cout<<std::endl;
+
+        if (verifyPassword(name, password) == true) {
+            std::cout<<"Login succesful, "<<name<<".\n"<<std::endl;
+            int staffOption;
+            do {
+
+
+                std::cout <<"Staff menu:"<<std::endl;
+                std::cout<<"1. Add a movie"<<std::endl;
+                std::cout<<"2. Adjust price for a showtime"<<std::endl;
+                std::cout<<"3. Create a movie series"<<std::endl;
+                std::cout<<"4. Delete a movie"<<std::endl;
+                std::cout<<"5. Exit"<<std::endl;
+                std::cout<<"Enter your option: ";
+                std::cin>>staffOption;
+                std::cin.ignore(10000, '\n');
+                switch (staffOption) {
+                    case 1: {
+                        staffAddMovie(movies_list);
+                        break;
+                    }
+                    case 2: {
+                        staffAdjustPrice(dates_list);
+                        break;
+                    }
+                    case 3:{
+                        staffCreateSeries(movies_list);
+                        break;
+                     }
+                    case 4: {
+                        //staffDeleteMovies();
+                        break;
+                    }
+                    case 5: {
+                        break;
+                    }
+                }
+            }while (staffOption!=5);
+            return;
+
+        }
+        else {
+            std::cout<<"Login failed. You have "<<attempts-1<<" more tries."<<std::endl;
+            attempts--;
+            std::cin.sync();
+            //synchronizing the input buffer
+        }
+    }
+    std::cout << "Access denied. No more attempts left." << std::endl;
+
+
+}
+
+
+
+
+
 
 void case8(){
     std::cout << "Constructors and operators for the class \"Movie\":\n\n";
@@ -289,11 +327,11 @@ void displayMenu() {
     std::cout << "1. Show available movies" <<std::endl;
     std::cout << "2. Show available runtimes for a movie" <<std::endl;
     std::cout << "3. Reserve a seat" <<std::endl;
-    std::cout << "4. Assign a seat automatically\n   we will provide best possible seats ;)" <<std::endl;
-    std::cout << "5. Cancel a reservation"<<std::endl;
-    std::cout << "6. Staff menu" <<std::endl;
-    std::cout << "7. Work with constructors and operators\n   ()" <<std::endl;
-    std::cout << "8. Exit" <<std::endl;
+    //std::cout << "4. Assign a seat automatically\n   we will provide best possible seats ;)" <<std::endl;
+    std::cout << "4. Cancel a reservation"<<std::endl;
+    std::cout << "5. Staff menu" <<std::endl;
+    std::cout << "6. Work with constructors and operators\n   ()" <<std::endl;
+    std::cout << "7. Exit" <<std::endl;
 }
 
 
@@ -305,8 +343,8 @@ void displayMenu() {
 int main() {
     ///-----------------------initializing repo------------------------------
     Repository<Movie> movies_list;
-    RepositoryDates<MovieDate> movies_dates;
-    Reservations<Ticket> tickets_list;
+    Repository<MovieDate> movies_dates;
+    Repository<Ticket> tickets_list;
     std::vector<Room> rooms;
 
 
@@ -324,16 +362,16 @@ int main() {
     Movie* movie9 = new Movie("Gladiator",2000,155,8.5	);
     Movie* movie10 = new Movie("Gladiator II", 2024,148,6.6);
 
-    movies_list.addMovie(*movie1);
-    movies_list.addMovie(*movie2);
-    movies_list.addMovie(*movie3);
-    movies_list.addMovie(*movie4);
-    movies_list.addMovie(*movie5);
-    movies_list.addMovie(*movie6);
-    movies_list.addMovie(*movie7);
-    movies_list.addMovie(*movie8);
-    movies_list.addMovie(*movie9);
-    movies_list.addMovie(*movie10);
+    movies_list.addElement(*movie1);
+    movies_list.addElement(*movie2);
+    movies_list.addElement(*movie3);
+    movies_list.addElement(*movie4);
+    movies_list.addElement(*movie5);
+    movies_list.addElement(*movie6);
+    movies_list.addElement(*movie7);
+    movies_list.addElement(*movie8);
+    movies_list.addElement(*movie9);
+    movies_list.addElement(*movie10);
 
 
     //movies_list.displayMovies();
@@ -371,31 +409,31 @@ int main() {
     MovieDate* moviedate24 = new MovieDate(movie4, 4, 26.00, 7, 7, 2025, 17, 55);
     MovieDate* moviedate25 = new MovieDate(movie5, 1, 22.75, 11, 7, 2025, 19, 20);
 
-    movies_dates.addRepositoryDate(*moviedate1);
-    movies_dates.addRepositoryDate(*moviedate2);
-    movies_dates.addRepositoryDate(*moviedate3);
-    movies_dates.addRepositoryDate(*moviedate4);
-    movies_dates.addRepositoryDate(*moviedate5);
-    movies_dates.addRepositoryDate(*moviedate6);
-    movies_dates.addRepositoryDate(*moviedate7);
-    movies_dates.addRepositoryDate(*moviedate8);
-    movies_dates.addRepositoryDate(*moviedate9);
-    movies_dates.addRepositoryDate(*moviedate10);
-    movies_dates.addRepositoryDate(*moviedate11);
-    movies_dates.addRepositoryDate(*moviedate12);
-    movies_dates.addRepositoryDate(*moviedate13);
-    movies_dates.addRepositoryDate(*moviedate14);
-    movies_dates.addRepositoryDate(*moviedate15);
-    movies_dates.addRepositoryDate(*moviedate16);
-    movies_dates.addRepositoryDate(*moviedate17);
-    movies_dates.addRepositoryDate(*moviedate18);
-    movies_dates.addRepositoryDate(*moviedate19);
-    movies_dates.addRepositoryDate(*moviedate20);
-    movies_dates.addRepositoryDate(*moviedate21);
-    movies_dates.addRepositoryDate(*moviedate22);
-    movies_dates.addRepositoryDate(*moviedate23);
-    movies_dates.addRepositoryDate(*moviedate24);
-    movies_dates.addRepositoryDate(*moviedate25);
+    movies_dates.addElement(*moviedate1);
+    movies_dates.addElement(*moviedate2);
+    movies_dates.addElement(*moviedate3);
+    movies_dates.addElement(*moviedate4);
+    movies_dates.addElement(*moviedate5);
+    movies_dates.addElement(*moviedate6);
+    movies_dates.addElement(*moviedate7);
+    movies_dates.addElement(*moviedate8);
+    movies_dates.addElement(*moviedate9);
+    movies_dates.addElement(*moviedate10);
+    movies_dates.addElement(*moviedate11);
+    movies_dates.addElement(*moviedate12);
+    movies_dates.addElement(*moviedate13);
+    movies_dates.addElement(*moviedate14);
+    movies_dates.addElement(*moviedate15);
+    movies_dates.addElement(*moviedate16);
+    movies_dates.addElement(*moviedate17);
+    movies_dates.addElement(*moviedate18);
+    movies_dates.addElement(*moviedate19);
+    movies_dates.addElement(*moviedate20);
+    movies_dates.addElement(*moviedate21);
+    movies_dates.addElement(*moviedate22);
+    movies_dates.addElement(*moviedate23);
+    movies_dates.addElement(*moviedate24);
+    movies_dates.addElement(*moviedate25);
 
 
     // MovieDate amovieDate("Oppenheimer", 2023, 181, 8.3, 25,12, 4, 2025, 18, 30);
@@ -422,6 +460,7 @@ int main() {
     rooms.push_back(room4);
 
 
+
     //--------------------------Main Loop----------------------------------
         int option;
         do {
@@ -441,25 +480,21 @@ int main() {
                 }
                 case 3: {
                     reserveSeat(movies_dates, rooms);
+                    break;
                 }
-                case 4:
-                    std::cout << "";
-                break;
-                case 5:
-                    std::cout << "";
+                case 4: {
 
-                break;
+                    break;
+                }
+                case 5:{
+                    staffMenu(movies_list,movies_dates);
+                    break;
+                }
                 case 6:
                     std::cout << "";
 
                 break;
                 case 7:
-                    std::cout << "";
-                break;
-                case 8:
-                    case8();
-                break;
-                case 9:
                     std::cout << "Exiting..." <<std::endl;
                 break;
                 default:
@@ -467,7 +502,7 @@ int main() {
                 break;
             }
 
-        }while (option != 9);
+        }while (option != 7);
 
 
 

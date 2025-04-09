@@ -29,8 +29,13 @@ void Room::showRoomInfo() const {
 
 void Room::showBoard() const {
     int i, j;
-    std::cout <<"-----SCREEN-----SCREEN-----SCREEN-----SCREEN-----SCREEN-----"<<"\t"<< std::endl;
-    std::cout << "    ";
+    //std::cout <<"-----SCREEN-----SCREEN-----SCREEN-----SCREEN-----SCREEN-----"<<"\t"<< std::endl;
+    std::cout << "\t";
+    for (j = 0; j < columns_number -1; j++) {
+        std::cout <<"-SCREEN-";
+    }
+    std::cout << std::endl;
+    std::cout << "\t";
     for (j = 0; j < columns_number; j++) {
         std::cout << j+1 << "\t";
     }

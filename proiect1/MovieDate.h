@@ -4,6 +4,8 @@
 
 #ifndef MOVIEDATE_H
 #define MOVIEDATE_H
+#include <list>
+
 
 static int id = 0;
 
@@ -45,6 +47,8 @@ public:
 
     //static_cast
     void adjustPrice(float discount);
+
+    //void MovieDate::adjustGlobalPrice(std::list<MovieDate*>& movieDates, const std::string& movieTitle, float discountFactor){};
 
     //destructor (non-virtual because this class doesn't have any subclasses)
     ~MovieDate();
