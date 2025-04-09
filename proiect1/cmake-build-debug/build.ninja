@@ -77,6 +77,13 @@ build CMakeFiles/proiect1.dir/Room.cpp.o: CXX_COMPILER__proiect1_unscanned_Debug
   OBJECT_DIR = CMakeFiles/proiect1.dir
   OBJECT_FILE_DIR = CMakeFiles/proiect1.dir
 
+build CMakeFiles/proiect1.dir/Ticket.cpp.o: CXX_COMPILER__proiect1_unscanned_Debug /home/andrei-cristea/Desktop/Facultate/Anul$ I/Semestrul$ 2/POO/proiect1/Ticket.cpp || cmake_object_order_depends_target_proiect1
+  DEP_FILE = CMakeFiles/proiect1.dir/Ticket.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always -Wall -Wextra -pedantic
+  INCLUDES = -I"/home/andrei-cristea/Desktop/Facultate/Anul I/Semestrul 2/POO/proiect1"
+  OBJECT_DIR = CMakeFiles/proiect1.dir
+  OBJECT_FILE_DIR = CMakeFiles/proiect1.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target proiect1
@@ -85,7 +92,7 @@ build CMakeFiles/proiect1.dir/Room.cpp.o: CXX_COMPILER__proiect1_unscanned_Debug
 #############################################
 # Link the executable proiect1
 
-build proiect1: CXX_EXECUTABLE_LINKER__proiect1_Debug CMakeFiles/proiect1.dir/main.cpp.o CMakeFiles/proiect1.dir/Movie.cpp.o CMakeFiles/proiect1.dir/MovieDate.cpp.o CMakeFiles/proiect1.dir/Room.cpp.o
+build proiect1: CXX_EXECUTABLE_LINKER__proiect1_Debug CMakeFiles/proiect1.dir/main.cpp.o CMakeFiles/proiect1.dir/Movie.cpp.o CMakeFiles/proiect1.dir/MovieDate.cpp.o CMakeFiles/proiect1.dir/Room.cpp.o CMakeFiles/proiect1.dir/Ticket.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/proiect1.dir
   POST_BUILD = :

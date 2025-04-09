@@ -42,9 +42,7 @@ public:
             return list;
         }
 
-        const std::list<T>& getRepositoryDates() const {
-            return list;
-        }
+    const std::list<MovieDate>& getRepositoryDates() const { return list; }
 
         void displayRepositoryDates() const {
             std::cout << "The list with all the repository dates is the following:" << std::endl;

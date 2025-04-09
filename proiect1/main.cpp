@@ -27,20 +27,10 @@
 #include <fstream>
 #include "StaffFunctions.h"
 #include "TemplateClasses.h"
+#include "Ticket.h"
 
-//-------------GLOBAL VARIABLES---------------------------
-
-//-------------CLASSES------------------------------------
-
-class Ticket {
-private:
-    int movie_id;
-    int room_id;
-    int rows_number;
-    int columns_number;
-
-public:
-};
+//--------Global variables--------------------------------
+Repository<Ticket> tickets_list;
 
 //---------UI functions-------------------------------------
 
@@ -83,7 +73,7 @@ void showMovieDatesForMovieID(const Repository<MovieDate> & repo) {
     }
 }
 
-void reserveSeat(const Repository<MovieDate> & repo, std::vector<Room>& rooms) {
+void reserveSeat(Repository<MovieDate> & repo, std::vector<Room>& rooms) {
     std::string movieTitle;
     std::cout << "Please enter the movie you want to watch: ";
     std::cin.ignore();
@@ -142,37 +132,50 @@ void reserveSeat(const Repository<MovieDate> & repo, std::vector<Room>& rooms) {
         std::cout<<"No room was found for the selected showtime."<<std::endl;
     }
 
-    std::cout<<"Room info: \n"<<std::endl;
-    selectedRoom->showRoomInfo();
-    selectedRoom->showBoard();
-    std::cout<<std::endl;
 
-    //
-    //  int room_id = selectedDate->getRoomId();
-    // Room* selectedRoom = nullptr;
-    // for (auto&room : rooms) {
-    //     if (room.getRoomId() == room_id) {
-    //         selectedRoom = &room;
-    //         break;
-    //     }
-    // }
-    // if (!selectedRoom) {
-    //     std::cout<<"Room not found for the selected runtime!";
-    //     return;
-    // }
+    std::cout << "Please enter how many seats you want to reserve: ";
+    int number;
+    std::cin >> number;
+    for (int i = 0; i < number; i++) {
 
-    int row, column;
-    std::cout << "Enter the seat row number you want to reserve: ";
-    std::cin >> row;
-    std::cout << "Enter column number: ";
-    std::cin >> column;
+        std::cout<<"Room info: \n"<<std::endl;
+        selectedRoom->showRoomInfo();
+        selectedRoom->showBoard();
+        std::cout<<std::endl;
 
-    try {
-        selectedRoom->modifyBoard(row, column);
-        std::cout<<"Seat reserved succesfully\n\n";
-    }
-    catch (const std::exception& e) {
-        std::cout<<"Error: "<<e.what();
+        //
+        //  int room_id = selectedDate->getRoomId();
+        // Room* selectedRoom = nullptr;
+        // for (auto&room : rooms) {
+        //     if (room.getRoomId() == room_id) {
+        //         selectedRoom = &room;
+        //         break;
+        //     }
+        // }
+        // if (!selectedRoom) {
+        //     std::cout<<"Room not found for the selected runtime!";
+        //     return;
+        // }
+
+        int row, column;
+        std::cout << "Enter the seat row number you want to reserve: ";
+        std::cin >> row;
+        std::cout << "Enter column number: ";
+        std::cin >> column;
+
+        try {
+            selectedRoom->modifyBoard(row, column);
+            std::cout<<"Seat reserved succesfully\n\n";
+
+            Ticket t(*selectedDate, *selectedRoom, row, column);
+            t.printTicket();
+            tickets_list.addElement(t);
+            std::cout<<std::endl;
+
+        }
+        catch (const std::exception& e) {
+            std::cout<<"Error: "<<e.what();
+        }
     }
 }
 
@@ -288,7 +291,7 @@ void staffMenu(Repository<Movie>& movies_list, Repository<MovieDate>& dates_list
 
 
 
-void case8(){
+void case6(){
     std::cout << "Constructors and operators for the class \"Movie\":\n\n";
     std::cout <<"Firstly i will use the default constructor,\nand after every modification i will print the object\n"<< std::endl;
     Movie film;
@@ -330,7 +333,7 @@ void displayMenu() {
     //std::cout << "4. Assign a seat automatically\n   we will provide best possible seats ;)" <<std::endl;
     std::cout << "4. Cancel a reservation"<<std::endl;
     std::cout << "5. Staff menu" <<std::endl;
-    std::cout << "6. Work with constructors and operators\n   ()" <<std::endl;
+    std::cout << "6. Work with constructors and operators (just for exemplification)" <<std::endl;
     std::cout << "7. Exit" <<std::endl;
 }
 
@@ -344,7 +347,7 @@ int main() {
     ///-----------------------initializing repo------------------------------
     Repository<Movie> movies_list;
     Repository<MovieDate> movies_dates;
-    Repository<Ticket> tickets_list;
+
     std::vector<Room> rooms;
 
 
@@ -490,10 +493,11 @@ int main() {
                     staffMenu(movies_list,movies_dates);
                     break;
                 }
-                case 6:
+                case 6:{
                     std::cout << "";
-
-                break;
+                    case6();
+                    break;
+                }
                 case 7:
                     std::cout << "Exiting..." <<std::endl;
                 break;

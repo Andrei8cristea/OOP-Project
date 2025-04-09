@@ -17,6 +17,8 @@ add_executable(proiect1
         Exceptions.h
         StaffFunctions.h
         TemplateClasses.h
+        Ticket.cpp
+        Ticket.h
 )
 
 # Ensure `passwords.txt` is copied to the build directory

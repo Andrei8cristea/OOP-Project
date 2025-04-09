@@ -5,6 +5,8 @@
 #ifndef MOVIEDATE_H
 #define MOVIEDATE_H
 #include <list>
+#include "Movie.h"
+#include <string>
 
 
 static int id = 0;
