@@ -2,7 +2,7 @@
 // Created by andrei-cristea on 4/5/25.
 //
 
-#include "Movie.h"
+#include "include/Movie.h"
 
 int Movie::id3 = 0;
 
@@ -23,7 +23,6 @@ Movie::Movie(std::string title, int year) : title(title), year_of_release(year),
 
 Movie::Movie(const Movie &another): movieID(another.movieID),title(another.title), year_of_release(another.year_of_release),duration(another.duration),rating(another.rating){
     //std::cout<<"Copy constructor called :)"<<std::endl;
-    ++movieCount;
 }
 
 Movie& Movie::operator=(const Movie &another) {
@@ -46,7 +45,7 @@ std::ostream& operator<<(std::ostream& os, const Movie& movie) {
 
     os << " 🆔 MOVIE ID     : " << movie.movieID << "\n";
     os << " 🎬 MOVIE TITLE  : " << movie.title << "\n";
-    os << " 📅 RELEASE YEAR: " << movie.year_of_release << "\n";
+    os << " 📅 RELEASE YEAR : " << movie.year_of_release << "\n";
     os << " ⏳ DURATION     : " << movie.duration << " min\n";
     os << " ⭐ RATING       : " << movie.rating << "/10🌟\n";
     return os;
@@ -91,6 +90,7 @@ Movie Movie::operator+(const Movie& movie) const {
 Movie::~Movie() {
     // std::cout<<"Destructor called :)"<<std::endl;
     // std::cout<<"For the movie: "<<title<<std::endl;
+    --movieCount;
 }
 
 //another overloaded operator built as a non-member function
@@ -121,3 +121,7 @@ void Movie::showMovieInfo() const {
     std::cout << " 📅 RELEASE YEAR: " << year_of_release << "\n";
     std::cout << " ⏳ DURATION    : " << duration << " min\n";
     std::cout << " ⭐ RATING      : " << rating << "/10\n";}
+
+void Movie::printStatistics(){
+    std::cout<< "Total Movies: " << movieCount << std::endl;
+}

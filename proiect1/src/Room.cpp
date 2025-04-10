@@ -2,8 +2,8 @@
 // Created by andrei-cristea on 4/5/25.
 //
 
-#include "Room.h"
-#include "Exceptions.h"
+#include "include/Room.h"
+#include "include/Exceptions.h"
 #include <iostream>
 
 Room::Room(int rows, int columns)
@@ -70,6 +70,18 @@ void Room::modifyBoard(int row_nr, int col_nr) {
         }
     }
 
+    else {
+        std::cout << "Invalid seat position!"<<"\n";
+    }
+}
+
+void Room::freeSeat(int row_nr, int col_nr) {
+    if (row_nr >= 1 && row_nr <= rows_number &&
+        col_nr >= 1 && col_nr <= columns_number) {
+        if (board[row_nr-1][col_nr-1] == '#') {
+            board[row_nr-1][col_nr-1] = '_';
+        }
+    }
     else {
         std::cout << "Invalid seat position!"<<"\n";
     }

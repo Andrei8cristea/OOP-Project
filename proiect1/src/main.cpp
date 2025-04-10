@@ -18,19 +18,20 @@
 #include <exception>
 #include <list>
 #include <algorithm>
-#include "Movie.h"
-#include "MovieDate.h"
-#include "Room.h"
-#include "Exceptions.h"
 #include <termios.h>
 #include <unistd.h>
 #include <fstream>
-#include "StaffFunctions.h"
-#include "TemplateClasses.h"
-#include "Ticket.h"
+
+#include "include/Movie.h"
+#include "include/MovieDate.h"
+#include "include/Room.h"
+#include "include/Exceptions.h"
+#include "include/StaffFunctions.h"
+#include "include/TemplateClasses.h"
+#include "include/Ticket.h"
 
 //--------Global variables--------------------------------
-Repository<Ticket> tickets_list;
+
 
 //---------UI functions-------------------------------------
 
@@ -73,7 +74,7 @@ void showMovieDatesForMovieID(const Repository<MovieDate> & repo) {
     }
 }
 
-void reserveSeat(Repository<MovieDate> & repo, std::vector<Room>& rooms) {
+void reserveSeat(Repository<MovieDate> & repo,Repository<Ticket> & tickets_list, std::vector<Room>& rooms) {
     std::string movieTitle;
     std::cout << "Please enter the movie you want to watch: ";
     std::cin.ignore();
@@ -195,7 +196,7 @@ void enableEchoMode() {
 }
 
 bool verifyPassword(const std::string& staffName, const std::string& password) {
-    std::ifstream file("/home/andrei-cristea/Desktop/Facultate/Anul I/Semestrul 2/POO/proiect1/passwords.txt");
+    std::ifstream file("/home/andrei-cristea/Desktop/Facultate/Anul I/Semestrul 2/POO/proiect1/build/passwords.txt");
     std::string line;
 
     if (!file) {
@@ -245,7 +246,8 @@ void staffMenu(Repository<Movie>& movies_list, Repository<MovieDate>& dates_list
                 std::cout<<"2. Adjust price for a showtime"<<std::endl;
                 std::cout<<"3. Create a movie series"<<std::endl;
                 std::cout<<"4. Delete a movie"<<std::endl;
-                std::cout<<"5. Exit"<<std::endl;
+                std::cout<<"5. See statistics"<<std::endl;
+                std::cout<<"6. Exit"<<std::endl;
                 std::cout<<"Enter your option: ";
                 std::cin>>staffOption;
                 std::cin.ignore(10000, '\n');
@@ -263,14 +265,19 @@ void staffMenu(Repository<Movie>& movies_list, Repository<MovieDate>& dates_list
                         break;
                      }
                     case 4: {
-                        //staffDeleteMovies();
+                        staffDeleteMovies(movies_list);
                         break;
                     }
                     case 5: {
+                        Movie::printStatistics();
+                        break;
+                    }
+                    case 6: {
+
                         break;
                     }
                 }
-            }while (staffOption!=5);
+            }while (staffOption!=6);
             return;
 
         }
@@ -286,7 +293,46 @@ void staffMenu(Repository<Movie>& movies_list, Repository<MovieDate>& dates_list
 
 }
 
+void cancelTicket(Repository<Ticket>& ticketsRepo, std::vector<Room>& rooms) {
+    int ticketID;
+    std::cout<<"Enter your ticket ID you want to cancel: ";
+    std::cin>>ticketID;
 
+    bool found = false;
+    for (auto& it: ticketsRepo.getElements()) {
+        if (it.getTicketID() == ticketID) {
+            found = true;
+            int roomID= it.getRoomID();
+            int row = it.getRow();
+            int col = it.getColumn();
+
+            Room* ticketRoom = nullptr;
+            for (auto& room : rooms) {
+                if (room.getRoomId()==roomID) {
+                    ticketRoom = &room;
+                    break;
+                }
+            }
+
+            if (ticketRoom != nullptr) {
+                ticketRoom->freeSeat(row,col);
+                std::cout<<"Your seat has been freed in room with id: "<<roomID<<std::endl;
+            }
+            else {
+                std::cout<<"Room hasn't been found!"<<std::endl;
+            }
+
+            //I also have to delete the ticket from the tickets repository
+            ticketsRepo.deleteElement(it);
+            std::cout<<"Your ticket, with ID "<<ticketID<< " has been deleted.\n\n\n"<<std::endl;
+            break;
+        }
+    }
+    if (!found) {
+        std::cout<<"The ticket ID you have entered has not been found in our list.\n";
+    }
+
+}
 
 
 
@@ -324,17 +370,29 @@ void case6(){
 
 }
 
+void sortShowtimesByPrice(Repository<MovieDate>& repo) {
+    auto& showtimes = repo.getElements();
+    std::vector<MovieDate> vec(showtimes.begin(), showtimes.end());
+    std::sort(vec.begin(), vec.end(),[](const MovieDate&a, const MovieDate&b) {
+        return a.getPrice() < b.getPrice();
+    });
+    std::cout<<"This are the showtimes sorted by price: "<<std::endl;
+    for (const auto& md : vec) {
+        md.showMovieDate();
+    }
+}
+
 void displayMenu() {
     std::cout << "TICKET RESERVATION SYSTEM FOR CINEMA" << std::endl;
     std::cout << "Please select one of the following options:" <<std::endl;
     std::cout << "1. Show available movies" <<std::endl;
     std::cout << "2. Show available runtimes for a movie" <<std::endl;
-    std::cout << "3. Reserve a seat" <<std::endl;
-    //std::cout << "4. Assign a seat automatically\n   we will provide best possible seats ;)" <<std::endl;
-    std::cout << "4. Cancel a reservation"<<std::endl;
-    std::cout << "5. Staff menu" <<std::endl;
-    std::cout << "6. Work with constructors and operators (just for exemplification)" <<std::endl;
-    std::cout << "7. Exit" <<std::endl;
+    std::cout << "3. All showtimes (sorted by price)" <<std::endl;
+    std::cout << "4. Reserve a seat" <<std::endl;
+    std::cout << "5. Cancel a reservation"<<std::endl;
+    std::cout << "6. Staff menu" <<std::endl;
+    std::cout << "7. Work with constructors and operators (just for exemplification)" <<std::endl;
+    std::cout << "8. Exit" <<std::endl;
 }
 
 
@@ -345,13 +403,10 @@ void displayMenu() {
 
 int main() {
     ///-----------------------initializing repo------------------------------
+    Repository<Ticket> tickets_list;
     Repository<Movie> movies_list;
     Repository<MovieDate> movies_dates;
-
     std::vector<Room> rooms;
-
-
-
 
     ///-----------------------initializing movies----------------------------
     Movie* movie1 = new Movie("Oppenheimer",2023,180,8.3);
@@ -376,11 +431,7 @@ int main() {
     movies_list.addElement(*movie9);
     movies_list.addElement(*movie10);
 
-
-    //movies_list.displayMovies();
     ///-------------------------initializing movie dates-------------------------
-
-
 
     MovieDate* moviedate1  = new MovieDate(movie1, 1, 20.30, 12, 4, 2025, 19, 15);
     MovieDate* moviedate2  = new MovieDate(movie2, 2, 18.50, 14, 4, 2025, 20, 00);
@@ -438,20 +489,6 @@ int main() {
     movies_dates.addElement(*moviedate24);
     movies_dates.addElement(*moviedate25);
 
-
-    // MovieDate amovieDate("Oppenheimer", 2023, 181, 8.3, 25,12, 4, 2025, 18, 30);
-    // MovieDate bmovieDate("Interstellar", 2014, 179, 8.7, 30,15, 5, 2025, 20, 00);
-    // MovieDate cmovieDate("Batman", 2022, 176, 7.8, 20,20, 6, 2025, 22, 15);
-
-
-    // Movie* obj = new MovieDate();
-    // displayMovieFullInfo(obj);
-    // delete obj;
-    // Movie m;
-    // std::cin>>m;
-    // bmovieDate.showMovieDate();
-    // cmovieDate.showMovieDate();
-
     ///-------------------------initializing rooms ------------------------------
     Room room1(10,20);
     Room room2(15,15);
@@ -482,23 +519,27 @@ int main() {
                     break;
                 }
                 case 3: {
-                    reserveSeat(movies_dates, rooms);
+                    sortShowtimesByPrice(movies_dates);
                     break;
                 }
                 case 4: {
-
+                    reserveSeat(movies_dates,tickets_list, rooms);
                     break;
                 }
-                case 5:{
-                    staffMenu(movies_list,movies_dates);
+                case 5: {
+                    cancelTicket(tickets_list, rooms);
                     break;
                 }
                 case 6:{
+                    staffMenu(movies_list,movies_dates);
+                    break;
+                }
+                case 7:{
                     std::cout << "";
                     case6();
                     break;
                 }
-                case 7:
+                case 8:
                     std::cout << "Exiting..." <<std::endl;
                 break;
                 default:
@@ -506,9 +547,7 @@ int main() {
                 break;
             }
 
-        }while (option != 7);
-
-
+        }while (option != 8);
 
 
     delete movie1;
@@ -547,7 +586,6 @@ int main() {
     delete moviedate23;
     delete moviedate24;
     delete moviedate25;
-
 
     return 0;
 }

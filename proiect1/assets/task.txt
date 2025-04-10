@@ -1,0 +1,123 @@
+General Rules
+- Failure to comply will result in the project not being scored.
+
+Project Requirements💯
+--------------------
+✅-The program must be written in C++.
+✅-The program must have an interactive menu (only for functionality illustration).
+✅-The program must compile without errors.
+✅- No global variables.
+✅-Private (or protected) member data.
+✅-GitHub Actions must pass.
+✅-Commits on Git must be appropriate and timely.
+✅-Avoid meaningless use of language features.
+✅-Avoid using language features to “legally” bypass another rule.
+✅-Excessive use of friend classes should be avoided.
+✅-Excessive use of static elements should be avoided.
+    -Each requirement will be scored:
+        - ½ points for implementation.
+        - ½ points for meaningful implementation.
+
+Requirements:
+
+Class Hierarchies (6 points)💯
+----------------------------
+-   ✅Define at least 2-3 class hierarchies that interact within the chosen theme
+    (via composition, aggregation, or logical method calls).
+    =>I have Movie and Room basic classes, MovieDate derived class and ticket multiple
+    derived, also I have template and exception classes
+-   ✅At least one class must contain:
+    - Initialization constructors.
+    - Overloaded constructor.
+    - Copy constructor.
+    - Copy assignment operator (operator=).
+    - Destructor.
+    - operator<< for display (std::ostream).
+    - operator>> for input (std::istream).
+    - At least one overloaded operator as a member function.
+    - At least one overloaded operator as a non-member function
+    (not necessarily as a friend function).
+    => All of them are used for the Movie class. Also, I am using part of them in
+    other classes
+
+
+Derived Classes💯
+---------------
+✅-Implement functionalities using upcasting & down casting.
+    -Implemented via 2-3 methods specific to the chosen theme.
+    -Functions for input/output and destructors are not included, although they must be implemented.
+    =>in displayMovieFullInfo I used dynamic_cast and starting with a pointer
+    to movie I down casted to obtain info about MovieDate
+    =>in staffCreateSeries I used the + operator (upcast)
+
+✅-Call the base class constructor from derived constructors.
+    =>in MovieDate I called the constructor from Movie
+✅-Override operator= for proper copying and assignment.
+    =>in Movie
+✅-Use virtual destructor.
+    =>in Movie
+    =>when I work with pointers to movie, the destructors from derived classes will be called correctly
+✅-Other classes will only define the necessary functionalities.
+✅- At least one well-developed hierarchy (with 2-3 subclasses from a base class).
+    - A hierarchy is valid even if there is only one base class, as long as it does not inherit from another hierarchy.
+    =>Movie has two derived classes: movieDate and ticket
+
+Additional Concepts💯
+-------------------
+✅-Use as many const as possible (0.25 points).
+    => everything that I don't change during a function has been declared as const
+✅- Static functions and attributes (0.5 points):
+  - At least 1 non-trivial static attribute.
+    =>Movie:movieCount and Ticket::ticketCount
+  - At least 1 non-trivial static function.
+    =>Movie::printStatistics function that is static
+
+Exceptions (0.5 points)💯
+------------------------
+✅-Start from std::exception.
+    => I created an exception class
+✅-Illustrate exception propagation.
+    =>In verifyPassword if the file is inaccessible
+✅-Demonstrate upcasting within catch blocks.
+    =>In reserve seat:
+    catch (const std::exception& e) { std::cout << "Error: " << e.what(); }
+    this upcast to the base class std::exception any type of derived exception
+    (runtime_error , logic_error , etc )
+✅-Used at least once in a scenario where classic error handling is difficult.
+    =>in modify board I throw an exception if the seat is already booked
+
+Abstract Classes (0.25 points)🚨
+- Use at least one abstract class.
+
+Templates💯
+---------
+-✅Create at least one template class (1 point).
+-✅Use two instances of this class (0.5 points).
+    => Template class used for holding movies, movie dates and tickets
+
+STL (0.25 points)💯
+-----------------
+
+-✅Use two different data structures (containers):
+  - Examples: vector, list, or any other array-like container.
+    => I have used std::list and std::vector
+-✅Use one algorithm with a lambda function:
+  - Examples: sort, transform.
+    => sort in sortShowtimesByPrice
+
+Design Patterns (0.75 points)🚨
+- Use at least two design patterns.
+
+
+
+#####################################################################
+Observations
+There may be point deductions (up to 2 points) for the following:
+- Memory leaks.
+- Failure to use a virtual destructor when necessary.
+- Abuse of certain concepts (e.g., declaring all functions as virtual).
+- Calling virtual functions inside constructors.
+
+Most of these aspects are covered in the CppCoreGuidelines, but you don’t need to read the entire document—just write sufficiently well-organized code.
+
+The build/ and install_dir/ folders must be added to .gitignore since they contain generated files that do not need versioning.

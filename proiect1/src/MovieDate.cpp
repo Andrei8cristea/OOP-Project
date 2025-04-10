@@ -3,8 +3,8 @@
 //
 
 
-#include "Movie.h"
-#include "MovieDate.h"
+#include "include/Movie.h"
+#include "include/MovieDate.h"
 #include <string>
 #include <iostream>
 #include <list>
@@ -48,13 +48,13 @@ void MovieDate::showMovieDate() const {
     std::cout << "+----------------------------------------+\n";
     std::cout << "|             SHOWTIME INFO              |\n";
     std::cout << "+----------------------------------------+\n";
-    std::cout << " 💰 PRICE      : $" << price << "\n";
-    std::cout << " 🏠ROOM NUMBER : " << room_id << "\n";
-    std::cout << " 📅 DATE       : " << (date < 10 ? "0" : "") << date << "/"
+    std::cout << "🆔MOVIEDATE ID   : "<<moviedate_id<<std::endl;
+    std::cout << " 💰 PRICE        : $" << price << "\n";
+    std::cout << " 🏠ROOM NUMBER   : " << room_id << "\n";
+    std::cout << " 📅 DATE         : " << (date < 10 ? "0" : "") << date << "/"
              << (month < 10 ? "0" : "") << month << "/" << year << "\n";
-    std::cout << " ⏰ TIME       : " << (hour < 10 ? "0" : "") << hour << ":"
+    std::cout << " ⏰ TIME         : " << (hour < 10 ? "0" : "") << hour << ":"
               << (minute < 10 ? "0" : "") << minute << "\n";
-    std::cout << "🆔MOVIEDATE ID  :"<<moviedate_id<<std::endl;
 
     std::cout << "+----------------------------------------+\n";
     std::cout << "|           ENJOY YOUR MOVIE!            |\n";

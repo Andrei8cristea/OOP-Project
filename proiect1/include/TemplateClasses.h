@@ -37,10 +37,15 @@ public:
         //     std::cout << reservation << std::endl;
         // }
     }
-        //getter for the repository dates
-        std::list<T>& getRepositoryDates() {
+        //getter for the elelments
+        std::list<T>& getElements() {
             return list;
         }
+
+
+    std::list<T>& getRepositoryDates() {
+        return list;
+    }
 
     const std::list<MovieDate>& getRepositoryDates() const { return list; }
 

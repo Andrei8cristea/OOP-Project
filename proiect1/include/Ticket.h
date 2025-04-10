@@ -26,6 +26,23 @@ public:
         return ticketID;
     }
 
+
+    //getter for row
+    int getRow() const {
+        return seatRow;
+    }
+
+    //getter for column
+    int getColumn() const {
+        return seatColumn;
+    }
+
+
+    //getter for roomid
+    int getRoomID()const {
+        return Room::getRoomId();
+    }
+
 };
 
 

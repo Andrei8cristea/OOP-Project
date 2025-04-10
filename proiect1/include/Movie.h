@@ -65,6 +65,10 @@ public:
     bool operator==(const Movie &movie1) const;
 
 
+    static void printStatistics();
+
+
+
 };
 
 

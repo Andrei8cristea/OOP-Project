@@ -6,11 +6,10 @@
 #define STAFFFUNCTIONS_H
 
 
-#include "Movie.h"
-#include "Exceptions.h"
-#include "MovieDate.h"
-#include "TemplateClasses.h"
-#include "MovieDate.h"
+#include "include/Movie.h"
+#include "include/Exceptions.h"
+#include "include/MovieDate.h"
+#include "include/TemplateClasses.h"
 
 
 void staffAddMovie(Repository<Movie>& moviesRepo) {
@@ -37,7 +36,7 @@ void staffAdjustPrice(Repository<MovieDate>& repo) {
     std::getline(std::cin, movieTitle);
 
     const MovieDate* selectedDate = nullptr;
-    for (const auto& md : repo.getRepositoryDates()) {
+    for (auto& md : repo.getRepositoryDates()) {
         if (md.getTitle() == movieTitle) {
             selectedDate = &md;
             break;
@@ -116,17 +115,25 @@ void staffCreateSeries(Repository<Movie>& moviesRepo) {
 
 
 
-void  staffDeleteMovies();
+void  staffDeleteMovies(Repository<Movie>& moviesRepo) {
+    std::cout << "Please enter the ID of the movie you want to delete: ";
 
+    int movieid;
 
-
-
-
-
-
-
-
-
-
+    std::cin >> movieid;
+    std::cout <<"Searching for the movie "<<movieid<<" ..."<< std::endl;
+    bool found = false;
+    for (const auto& md : moviesRepo.getElements()) {
+        if (md.getmovieID() == movieid) {
+            moviesRepo.deleteElement(md);
+            found = true;
+            std::cout<<"Successfully deleted the movie "<<md.getTitle()<<" ."<<std::endl;
+            break;
+        }
+    }
+    if (!found) {
+        std::cout<<"We're sorry! No Movie found for the ID: "<<movieid<<std::endl;
+    }
+}
 
 #endif //STAFFFUNCTIONS_H

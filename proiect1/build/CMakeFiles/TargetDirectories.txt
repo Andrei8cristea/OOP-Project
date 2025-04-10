@@ -1,0 +1,3 @@
+/home/andrei-cristea/Desktop/Facultate/Anul I/Semestrul 2/POO/proiect1/build/CMakeFiles/proiect1.dir
+/home/andrei-cristea/Desktop/Facultate/Anul I/Semestrul 2/POO/proiect1/build/CMakeFiles/edit_cache.dir
+/home/andrei-cristea/Desktop/Facultate/Anul I/Semestrul 2/POO/proiect1/build/CMakeFiles/rebuild_cache.dir

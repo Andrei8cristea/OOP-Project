@@ -58,6 +58,11 @@ public:
     //getter for room_id
     int getRoomId() const;
 
+    //getter for price
+    float getPrice() const {
+        return price;
+    }
+
 };
 
 
