@@ -6,6 +6,8 @@
 #include "include/Exceptions.h"
 #include <iostream>
 
+
+
 Room::Room(int rows, int columns)
 :room_id(id2++),rows_number(rows),columns_number(columns),board(rows, std::vector<char>(columns, '_')){}
 

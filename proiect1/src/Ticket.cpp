@@ -28,11 +28,3 @@ void Ticket::printTicket() const {
     //std::cout<<"......\n"<<std::endl;
 
 }
-
-
-
-
-
-
-
-

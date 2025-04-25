@@ -97,4 +97,3 @@ void displayMovieFullInfo(Movie* moviePtr) {
 int MovieDate::getRoomId() const {
     return room_id;
 }
-

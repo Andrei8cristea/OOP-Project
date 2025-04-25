@@ -86,8 +86,10 @@ Exceptions (0.5 points)💯
 ✅-Used at least once in a scenario where classic error handling is difficult.
     =>in modify board I throw an exception if the seat is already booked
 
-Abstract Classes (0.25 points)🚨
-- Use at least one abstract class.
+Abstract Classes (0.25 points)💯
+✅-Use at least one abstract class.
+    =>MovieDateFactory class includes pure virtual methods so it is an abstract
+    class
 
 Templates💯
 ---------
@@ -107,6 +109,9 @@ STL (0.25 points)💯
 
 Design Patterns (0.75 points)🚨
 - Use at least two design patterns.
+   =>Factory Method which I use in the MovieDateFactory class
+   =>
+
 
 
 

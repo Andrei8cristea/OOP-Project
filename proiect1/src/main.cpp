@@ -29,6 +29,7 @@
 #include "include/StaffFunctions.h"
 #include "include/TemplateClasses.h"
 #include "include/Ticket.h"
+#include "include/MovieDateFactory.h"
 
 //--------Global variables--------------------------------
 
@@ -117,7 +118,7 @@ void reserveSeat(Repository<MovieDate> & repo,Repository<Ticket> & tickets_list,
         std::cin >> selectedIndex;
     }
 
-    const MovieDate* selectedDatePtr = filteredDates[selectedIndex];
+    //const MovieDate* selectedDatePtr = filteredDates[selectedIndex];
 
     int roomID= selectedDate->getRoomId();
 
@@ -433,35 +434,39 @@ int main() {
 
     ///-------------------------initializing movie dates-------------------------
 
-    MovieDate* moviedate1  = new MovieDate(movie1, 1, 20.30, 12, 4, 2025, 19, 15);
-    MovieDate* moviedate2  = new MovieDate(movie2, 2, 18.50, 14, 4, 2025, 20, 00);
-    MovieDate* moviedate3  = new MovieDate(movie3, 3, 22.00, 17, 4, 2025, 21, 45);
-    MovieDate* moviedate4  = new MovieDate(movie4, 4, 19.99, 20, 4, 2025, 18, 30);
-    MovieDate* moviedate5  = new MovieDate(movie5, 1, 15.00, 24, 4, 2025, 17, 20);
 
-    MovieDate* moviedate6  = new MovieDate(movie6, 2, 18.75, 28, 4, 2025, 21, 10);
-    MovieDate* moviedate7  = new MovieDate(movie7, 3, 23.50, 1, 5, 2025, 19, 45);
-    MovieDate* moviedate8  = new MovieDate(movie8, 4, 20.00, 5, 5, 2025, 16, 50);
-    MovieDate* moviedate9  = new MovieDate(movie9, 1, 17.99, 9, 5, 2025, 20, 15);
-    MovieDate* moviedate10 = new MovieDate(movie10, 2, 21.50, 13, 5, 2025, 18, 40);
+    DefaultMovieDateFactory factory;
 
-    MovieDate* moviedate11 = new MovieDate(movie1, 3, 16.75, 17, 5, 2025, 22, 00);
-    MovieDate* moviedate12 = new MovieDate(movie2, 4, 19.99, 21, 5, 2025, 17, 30);
-    MovieDate* moviedate13 = new MovieDate(movie3, 1, 14.25, 25, 5, 2025, 21, 50);
-    MovieDate* moviedate14 = new MovieDate(movie4, 2, 23.00, 29, 5, 2025, 18, 10);
-    MovieDate* moviedate15 = new MovieDate(movie5, 3, 20.75, 2, 6, 2025, 19, 30);
+    //MovieDate* moviedate1  = new MovieDate(movie1, 1, 20.30, 12, 4, 2025, 19, 15);
+    auto moviedate1 = factory.createMovieDate(movie1, 1, 20.30, 12, 4, 2025, 19, 15);
+    auto moviedate2 = factory.createMovieDate(movie2, 2, 18.50, 14, 4, 2025, 20, 00);
+    auto moviedate3 = factory.createMovieDate(movie3, 3, 22.00, 17, 4, 2025, 21, 45);
+    auto moviedate4 = factory.createMovieDate(movie4, 4, 19.99, 20, 4, 2025, 18, 30);
+    auto moviedate5 = factory.createMovieDate(movie5, 1, 15.00, 24, 4, 2025, 17, 20);
 
-    MovieDate* moviedate16 = new MovieDate(movie6, 4, 25.99, 6, 6, 2025, 22, 20);
-    MovieDate* moviedate17 = new MovieDate(movie7, 1, 18.50, 10, 6, 2025, 16, 45);
-    MovieDate* moviedate18 = new MovieDate(movie8, 2, 22.99, 14, 6, 2025, 20, 55);
-    MovieDate* moviedate19 = new MovieDate(movie9, 3, 17.75, 18, 6, 2025, 19, 10);
-    MovieDate* moviedate20 = new MovieDate(movie10, 4, 19.50, 22, 6, 2025, 21, 35);
+    auto moviedate6 = factory.createMovieDate(movie6, 2, 18.75, 28, 4, 2025, 21, 10);
+    auto moviedate7 = factory.createMovieDate(movie7, 3, 23.50, 1, 5, 2025, 19, 45);
+    auto moviedate8 = factory.createMovieDate(movie8, 4, 20.00, 5, 5, 2025, 16, 50);
+    auto moviedate9 = factory.createMovieDate(movie9, 1, 17.99, 9, 5, 2025, 20, 15);
+    auto moviedate10 = factory.createMovieDate(movie10, 2, 21.50, 13, 5, 2025, 18, 40);
 
-    MovieDate* moviedate21 = new MovieDate(movie1, 1, 24.00, 26, 6, 2025, 18, 40);
-    MovieDate* moviedate22 = new MovieDate(movie2, 2, 21.25, 30, 6, 2025, 22, 00);
-    MovieDate* moviedate23 = new MovieDate(movie3, 3, 15.50, 3, 7, 2025, 20, 30);
-    MovieDate* moviedate24 = new MovieDate(movie4, 4, 26.00, 7, 7, 2025, 17, 55);
-    MovieDate* moviedate25 = new MovieDate(movie5, 1, 22.75, 11, 7, 2025, 19, 20);
+    auto moviedate11 = factory.createMovieDate(movie1, 3, 16.75, 17, 5, 2025, 22, 00);
+    auto moviedate12 = factory.createMovieDate(movie2, 4, 19.99, 21, 5, 2025, 17, 30);
+    auto moviedate13 = factory.createMovieDate(movie3, 1, 14.25, 25, 5, 2025, 21, 50);
+    auto moviedate14 = factory.createMovieDate(movie4, 2, 23.00, 29, 5, 2025, 18, 10);
+    auto moviedate15 = factory.createMovieDate(movie5, 3, 20.75, 2, 6, 2025, 19, 30);
+
+    auto moviedate16 = factory.createMovieDate(movie6, 4, 25.99, 6, 6, 2025, 22, 20);
+    auto moviedate17 = factory.createMovieDate(movie7, 1, 18.50, 10, 6, 2025, 16, 45);
+    auto moviedate18 = factory.createMovieDate(movie8, 2, 22.99, 14, 6, 2025, 20, 55);
+    auto moviedate19 = factory.createMovieDate(movie9, 3, 17.75, 18, 6, 2025, 19, 10);
+    auto moviedate20 = factory.createMovieDate(movie10, 4, 19.50, 22, 6, 2025, 21, 35);
+
+    auto moviedate21 = factory.createMovieDate(movie1, 1, 24.00, 26, 6, 2025, 18, 40);
+    auto moviedate22 = factory.createMovieDate(movie2, 2, 21.25, 30, 6, 2025, 22, 00);
+    auto moviedate23 = factory.createMovieDate(movie3, 3, 15.50, 3, 7, 2025, 20, 30);
+    auto moviedate24 = factory.createMovieDate(movie4, 4, 26.00, 7, 7, 2025, 17, 55);
+    auto moviedate25 = factory.createMovieDate(movie5, 1, 22.75, 11, 7, 2025, 19, 20);
 
     movies_dates.addElement(*moviedate1);
     movies_dates.addElement(*moviedate2);
@@ -561,7 +566,8 @@ int main() {
     delete movie9;
     delete movie10;
 
-    delete moviedate1;
+    //delete moviedate1;
+    /**
     delete moviedate2;
     delete moviedate3;
     delete moviedate4;
@@ -586,6 +592,6 @@ int main() {
     delete moviedate23;
     delete moviedate24;
     delete moviedate25;
-
+    **/
     return 0;
 }
