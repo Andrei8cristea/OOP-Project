@@ -11,12 +11,12 @@ int Movie::movieCount = 0; // static init
 Movie::Movie(const std::string& title, int year, int duration, float rating)
         : movieID(id3++),title(title), year_of_release(year), duration(duration), rating(rating) {++movieCount;}
 
-Movie::Movie() :movieID(-1), title("Unknown"), year_of_release(0), duration(0), rating(0) {
+Movie::Movie() :movieID(id3++), title("Unknown"), year_of_release(0), duration(0), rating(0) {
    // std::cout<<"default constructor called:)"<<std::endl;
     ++movieCount;
 }
 
-Movie::Movie(std::string title, int year) : title(title), year_of_release(year), duration(0), rating(0) {
+Movie::Movie(std::string title, int year) : movieID(id3++),title(title), year_of_release(year), duration(0), rating(0) {
     //std::cout <<"Overloaded constructor called :)"<< std::endl;
     ++movieCount;
 }
@@ -62,6 +62,9 @@ std::istream& operator>>(std::istream& is, Movie &movie) {
     std::cout<<"Enter rating: ";
     is >> movie.rating;
 
+    movie.movieID = Movie::id3++;
+    movie.movieCount ++;
+
 
     //checking and throwing exceptions
     // if(movie.year_of_release < 1800 || movie.year_of_release > 2030) {
@@ -74,7 +77,7 @@ std::istream& operator>>(std::istream& is, Movie &movie) {
     //     throw Exceptions("Rating is out of range!");
     // }
 
-    std::cout<< "reading operator friend fnct called:)" <<std::endl;
+    //std::cout<< "reading operator friend fnct called:)" <<std::endl;
     return is;
 }
 
@@ -84,6 +87,9 @@ Movie Movie::operator+(const Movie& movie) const {
     int newDuration = duration + movie.duration;
     float newRating = (rating + movie.rating) / 2.0f;
     //std::cout<< "+operator overloaded used :)"<<std::endl;
+
+    //because then two objects will be immediatly destryed, I have to keep the correct movie count
+    movie.movieCount = movie.movieCount + 3;
     return Movie(newTitle, newYearOfRelease, newDuration, newRating);
 }
 

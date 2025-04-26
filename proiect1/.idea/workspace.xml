@@ -30,17 +30,16 @@
   <component name="ChangeListManager">
     <list default="true" id="c634f2db-81b2-414c-8bea-e5c7943d93fe" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/task.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/task.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/build/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/build/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/proiect1.dir/src/Movie.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/proiect1.dir/src/Movie.cpp.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/proiect1.dir/src/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/proiect1.dir/src/main.cpp.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/proiect1" beforeDir="false" afterPath="$PROJECT_DIR$/build/proiect1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2025-04-25T16-01-53-0870.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/proiect1" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/proiect1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Movie.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Movie.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/MoviePrinter.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/MoviePrinter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/StaffFunctions.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/StaffFunctions.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/TemplateClasses.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/TemplateClasses.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Movie.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Movie.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -107,11 +106,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="proiect1" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="proiect1" TARGET_NAME="proiect1" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="proiect1" RUN_TARGET_NAME="proiect1">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -143,7 +137,8 @@
       <workItem from="1745591110981" duration="63000" />
       <workItem from="1745591183296" duration="148000" />
       <workItem from="1745591340131" duration="681000" />
-      <workItem from="1745592570972" duration="12553000" />
+      <workItem from="1745592570972" duration="12794000" />
+      <workItem from="1745688318882" duration="4020000" />
     </task>
     <servers />
   </component>

@@ -14,7 +14,7 @@
 
 void staffAddMovie(Repository<Movie>& moviesRepo) {
     Movie movie;
-    std::cout<<"Enter the details of the movie you want to add: \n";
+    std::cout<<"\n\nEnter the details of the movie you want to add: \n";
     try {
         std::cin>>movie;
     }catch (const Exceptions& e) {
@@ -23,6 +23,7 @@ void staffAddMovie(Repository<Movie>& moviesRepo) {
 
     moviesRepo.addElement(movie);
     std::cout<<"Movie "<<movie.getTitle()<<" added succesfully"<<std::endl;
+    std::cout<<"\n";
 }
 
 
@@ -32,7 +33,7 @@ void staffAdjustPrice(Repository<MovieDate>& repo) {
     //the same algorithm as in reserveSeat function
 
     std::string movieTitle;
-    std::cout << "Please enter the movie you want to adjust the price for: ";
+    std::cout << "\n\nPlease enter the movie you want to adjust the price for: ";
     std::getline(std::cin, movieTitle);
 
     const MovieDate* selectedDate = nullptr;
@@ -98,7 +99,7 @@ Movie findMovieInRepository(Repository<Movie>& repo, std::string title) {
 
 void staffCreateSeries(Repository<Movie>& moviesRepo) {
     std::string  title1, title2;
-    std::cout<<"Please enter the first movie title: ";
+    std::cout<<"\n\nPlease enter the first movie title: ";
     std::getline(std::cin,title1);
     std::cout<<"Please enter the second movie title: ";
     std::getline(std::cin,title2);
@@ -125,9 +126,11 @@ void  staffDeleteMovies(Repository<Movie>& moviesRepo) {
     bool found = false;
     for (const auto& md : moviesRepo.getElements()) {
         if (md.getmovieID() == movieid) {
+            std::cout<<"Successfully deleted the movie "<<md.getTitle()<<" ."<<std::endl;
+            //I have to put this text before actually delting the element
+            //otherwise I will output some junk
             moviesRepo.deleteElement(md);
             found = true;
-            std::cout<<"Successfully deleted the movie "<<md.getTitle()<<" ."<<std::endl;
             break;
         }
     }

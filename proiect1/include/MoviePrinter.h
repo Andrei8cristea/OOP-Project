@@ -66,7 +66,7 @@ public:
     // }
 
     std::string getTags() const override {
-        return "                        🆕 NEW RELEASE 🆕\n"+ moviePrinter->getTags();;
+        return " _________________\n/🆕 NEW RELEASE 🆕\\\n"+ moviePrinter->getTags();;
     }
 
 };
@@ -82,7 +82,7 @@ class TopRatedDecorator: public MoviePrinterDecorator {
     // }
 
     std::string getTags() const override {
-        return "                        🌟 TOP RATED 🌟\n"+ moviePrinter->getTags();
+        return "                         _______________\n                        /🌟 TOP RATED 🌟\\\n"+ moviePrinter->getTags();
     }
 
 };

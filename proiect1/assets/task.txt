@@ -107,10 +107,10 @@ STL (0.25 points)💯
   - Examples: sort, transform.
     => sort in sortShowtimesByPrice
 
-Design Patterns (0.75 points)🚨
-- Use at least two design patterns.
+Design Patterns (0.75 points)💯
+-✅Use at least two design patterns.
    =>(Creational Pattern)Factory Method which I use in the MovieDateFactory class
-   =>
+   =>(Structural Pattern)Decorator for the class MoviePrinter
 
 
 

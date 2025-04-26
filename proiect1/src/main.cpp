@@ -48,6 +48,7 @@ void showMovieDatesForMovieTitle(const Repository<MovieDate> & repo)
     for (const auto& md : repo.getRepositoryDates()) {
         if (md.getTitle() == movieTitle) {
             md.showMovieDate();
+            std::cout << "\n\n\n";
             found = true;
         }
     }
@@ -221,7 +222,7 @@ void staffMenu(Repository<Movie>& movies_list, Repository<MovieDate>& dates_list
     std::string password;
     int attempts = 3;
 
-    std::cout<<"Welcome to the staff menu."<<std::endl;
+    std::cout<<"\n\nWelcome to the staff menu."<<std::endl;
     std::cin.ignore(10000, '\n');
     //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     //here I empty the buffer because otherwise the input will be required
@@ -238,12 +239,12 @@ void staffMenu(Repository<Movie>& movies_list, Repository<MovieDate>& dates_list
         std::cout<<std::endl;
 
         if (verifyPassword(name, password) == true) {
-            std::cout<<"Login succesful, "<<name<<".\n"<<std::endl;
+            std::cout<<"\n\nLogin succesful, "<<name<<".\n"<<std::endl;
             int staffOption;
             do {
 
 
-                std::cout <<"Staff menu:"<<std::endl;
+                std::cout <<"\n\nStaff menu:"<<std::endl;
                 std::cout<<"1. Add a movie"<<std::endl;
                 std::cout<<"2. Adjust price for a showtime"<<std::endl;
                 std::cout<<"3. Create a movie series"<<std::endl;
@@ -271,11 +272,13 @@ void staffMenu(Repository<Movie>& movies_list, Repository<MovieDate>& dates_list
                         break;
                     }
                     case 5: {
+                        std::cout<<"\n\n";
                         Movie::printStatistics();
+                        std::cout<<"\n";
                         break;
                     }
                     case 6: {
-
+                        std::cout<<"Goodbye, " << name <<"!\n\n\n\n"<<std::endl;
                         break;
                     }
                 }
@@ -284,13 +287,13 @@ void staffMenu(Repository<Movie>& movies_list, Repository<MovieDate>& dates_list
 
         }
         else {
-            std::cout<<"Login failed. You have "<<attempts-1<<" more tries."<<std::endl;
+            std::cout<<"\n\nLogin failed. You have "<<attempts-1<<" more tries."<<std::endl;
             attempts--;
             std::cin.sync();
             //synchronizing the input buffer
         }
     }
-    std::cout << "Access denied. No more attempts left." << std::endl;
+    std::cout << "\n\nAccess denied. No more attempts left." << std::endl;
 
 
 }
@@ -381,6 +384,7 @@ void sortShowtimesByPrice(Repository<MovieDate>& repo) {
     std::cout<<"This are the showtimes sorted by price: "<<std::endl;
     for (const auto& md : vec) {
         md.showMovieDate();
+        std::cout << "\n\n\n";
     }
 }
 
@@ -580,6 +584,7 @@ int main() {
 
                         printer->printMovie();
                         std::cout << std::endl;
+                        std::cout << "\n\n\n";
                     }
                     break;
                 }

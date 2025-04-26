@@ -21,6 +21,7 @@ public:
         std::cout << "The list with all the movies is the following:\n" << std::endl;
         for (const T& movie : list) {
             std::cout << movie << std::endl;
+            std::cout << "\n\n\n";
         }
     }
 
