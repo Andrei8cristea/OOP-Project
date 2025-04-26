@@ -109,7 +109,7 @@ STL (0.25 points)💯
 
 Design Patterns (0.75 points)🚨
 - Use at least two design patterns.
-   =>Factory Method which I use in the MovieDateFactory class
+   =>(Creational Pattern)Factory Method which I use in the MovieDateFactory class
    =>
 
 

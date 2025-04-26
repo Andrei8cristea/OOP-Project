@@ -67,7 +67,13 @@ public:
 
     static void printStatistics();
 
+    int getYearOfRelease() const{
+        return year_of_release;
+    }
 
+    float getRating() const {
+        return rating;
+    }
 
 };
 

@@ -30,6 +30,7 @@
 #include "include/TemplateClasses.h"
 #include "include/Ticket.h"
 #include "include/MovieDateFactory.h"
+#include "include/MoviePrinter.h"
 
 //--------Global variables--------------------------------
 
@@ -383,6 +384,7 @@ void sortShowtimesByPrice(Repository<MovieDate>& repo) {
     }
 }
 
+
 void displayMenu() {
     std::cout << "TICKET RESERVATION SYSTEM FOR CINEMA" << std::endl;
     std::cout << "Please select one of the following options:" <<std::endl;
@@ -392,8 +394,9 @@ void displayMenu() {
     std::cout << "4. Reserve a seat" <<std::endl;
     std::cout << "5. Cancel a reservation"<<std::endl;
     std::cout << "6. Staff menu" <<std::endl;
-    std::cout << "7. Work with constructors and operators (just for exemplification)" <<std::endl;
-    std::cout << "8. Exit" <<std::endl;
+    std::cout << "7. Show top rated and new released movies" <<std::endl;
+    std::cout << "8. Work with constructors and operators (just for exemplification)" <<std::endl;
+    std::cout << "9. Exit" <<std::endl;
 }
 
 
@@ -409,6 +412,27 @@ int main() {
     Repository<MovieDate> movies_dates;
     std::vector<Room> rooms;
 
+    // Debugging for displaying both tags
+    // Movie movie1a("Test Movie", 1950, 180, 6);  // Meets both conditions
+    // Movie movie2a("Old Classic", 1945, 120, 4);   // Meets none
+    // Movie movie3a("Hit Movie", 1980, 150, 7);      // Only top rated
+    //
+    // std::vector<Movie> movies = {movie1a, movie2a, movie3a};
+    //
+    // for (const auto& m : movies) {
+    //     std::unique_ptr<IMoviePrinter> printer = std::make_unique<MoviePrinter>(m);
+    //
+    //     // Apply decorators if conditions hold.
+    //     if (m.getYearOfRelease() == 1950) {
+    //         printer = std::make_unique<NewReleaseDecorator>(std::move(printer));
+    //     }
+    //     if (m.getRating() > 5) {
+    //         printer = std::make_unique<TopRatedDecorator>(std::move(printer));
+    //     }
+    //
+    //     printer->printMovie();
+    //     std::cout << "-------------------------------------------\n";
+    // }
     ///-----------------------initializing movies----------------------------
     Movie* movie1 = new Movie("Oppenheimer",2023,180,8.3);
     Movie* movie2 = new Movie("The Godfather", 1972,175,9.2);
@@ -539,12 +563,32 @@ int main() {
                     staffMenu(movies_list,movies_dates);
                     break;
                 }
-                case 7:{
+                case 7: {
+                    std::cout << "NEW RELEASES & TOP RATED:" << std::endl;
+                    //if both I want to wrap the movie with both decorators and keep
+                    // them both on the screen
+                    for (const auto& m : movies_list.getElements()) {
+                        std::unique_ptr<IMoviePrinter> printer = std::make_unique<MoviePrinter>(m);
+
+                        if (m.getRating() > 7.5) {
+                            printer = std :: make_unique<TopRatedDecorator>(std::move(printer));
+                        }
+                        if (m.getYearOfRelease() > 2022) {
+                            printer = std :: make_unique<NewReleaseDecorator>(std::move(printer));
+                        }
+
+
+                        printer->printMovie();
+                        std::cout << std::endl;
+                    }
+                    break;
+                }
+                case 8:{
                     std::cout << "";
                     case6();
                     break;
                 }
-                case 8:
+                case 9:
                     std::cout << "Exiting..." <<std::endl;
                 break;
                 default:
@@ -552,7 +596,7 @@ int main() {
                 break;
             }
 
-        }while (option != 8);
+        }while (option != 9);
 
 
     delete movie1;
@@ -567,31 +611,30 @@ int main() {
     delete movie10;
 
     //delete moviedate1;
-    /**
-    delete moviedate2;
-    delete moviedate3;
-    delete moviedate4;
-    delete moviedate5;
-    delete moviedate6;
-    delete moviedate7;
-    delete moviedate8;
-    delete moviedate9;
-    delete moviedate10;
-    delete moviedate11;
-    delete moviedate12;
-    delete moviedate13;
-    delete moviedate14;
-    delete moviedate15;
-    delete moviedate16;
-    delete moviedate17;
-    delete moviedate18;
-    delete moviedate19;
-    delete moviedate20;
-    delete moviedate21;
-    delete moviedate22;
-    delete moviedate23;
-    delete moviedate24;
-    delete moviedate25;
-    **/
+    // delete moviedate2;
+    // delete moviedate3;
+    // delete moviedate4;
+    // delete moviedate5;
+    // delete moviedate6;
+    // delete moviedate7;
+    // delete moviedate8;
+    // delete moviedate9;
+    // delete moviedate10;
+    // delete moviedate11;
+    // delete moviedate12;
+    // delete moviedate13;
+    // delete moviedate14;
+    // delete moviedate15;
+    // delete moviedate16;
+    // delete moviedate17;
+    // delete moviedate18;
+    // delete moviedate19;
+    // delete moviedate20;
+    // delete moviedate21;
+    // delete moviedate22;
+    // delete moviedate23;
+    // delete moviedate24;
+    // delete moviedate25;
+
     return 0;
 }
